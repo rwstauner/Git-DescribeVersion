@@ -21,3 +21,11 @@ sub run {
 }
 
 1;
+
+=head1 SYNOPSIS
+
+Print out the version from L<Git::DescribeVersion> in one line:
+
+	perl -MGit::DescribeVersion::App -e run
+
+=cut
