@@ -11,7 +11,7 @@ our %Defaults = (
 	first_version 	=> 'v0.1',
 	match_pattern 	=> 'v[0-9]*',
 #	count_format 	=> 'v0.1.%d',
-	version_regexp 	=> '^(v.+)$'
+	version_regexp 	=> '^v(.+)$'
 );
 
 # TODO: attribute for returning dotted-decimal
@@ -35,14 +35,16 @@ sub version {
 sub parse_version {
   my ($self, $prefix, $count) = @_;
   # quote 'version' to reference the module and not call the local sub
-  return 'version'->parse("$prefix.$count")->numify;
+  return 'version'->parse("v$prefix.$count")->numify;
     #if $vstring =~ $version::LAX;
 }
 
 sub version_from_describe {
 	my ($self) = @_;
 	my ($ver) = eval {
-		$self->{git}->describe({match => $self->{match_pattern}, tags => 1, long => 1})
+		$self->{git}->describe(
+			{match => $self->{match_pattern}, tags => 1, long => 1}
+		);
 	} or return undef;
 
 	# ignore the -gSHA
