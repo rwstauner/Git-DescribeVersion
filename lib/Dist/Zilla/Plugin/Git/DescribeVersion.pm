@@ -65,8 +65,8 @@ It uses L<Git::DescribeVersion> to count the number of commits
 since the last tag (matching I<match_pattern>) or since the initial commit,
 and uses the result as the I<version> parameter for your distribution.
 
-The plugin accepts the same options as the C<new()> function
-in L<Git::DescribeVersion/OPTIONS>.
+The plugin accepts the same options as the base module's constructor.
+See L<Git::DescribeVersion/OPTIONS>.
 
 You can also set the C<V> environment variable to override the new version.
 This is useful if you need to bump to a specific version.  For example, if
