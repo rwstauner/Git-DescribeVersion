@@ -8,7 +8,9 @@ use Git::Wrapper;
 use version 0.77 ();
 
 our %Defaults = (
+	first_version 	=> 'v0.1',
 	match_pattern 	=> 'v[0-9]*',
+#	count_format 	=> 'v0.1.%d',
 	version_regexp 	=> '^(v.+)$'
 );
 
@@ -26,7 +28,8 @@ sub new {
 
 sub version {
 	my ($self) = @_;
-	return $self->version_from_describe();
+	return $self->version_from_describe() ||
+		$self->version_from_count_objects();
 }
 
 sub parse_version {
@@ -47,6 +50,17 @@ sub version_from_describe {
 	$tag =~ s/$self->{version_regexp}/$1/;
 
 	return $self->parse_version($tag, $count);
+}
+
+sub version_from_count_objects {
+	my ($self) = @_;
+	my @counts = $self->{git}->count_objects({v => 1});
+	my $count = 0;
+	local $_;
+	foreach (@counts){
+		/(count|in-pack): (\d+)/ and $count += $2;
+	}
+	return $self->parse_version($self->{first_version}, $count);
 }
 
 1;
