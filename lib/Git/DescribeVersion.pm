@@ -1,5 +1,5 @@
 package Git::DescribeVersion;
-# ABSTRACT: Use git-describe to determine the version of a git repo
+# ABSTRACT: Use git-describe to show a repo's version
 
 =head1 SYNOPSIS
 
