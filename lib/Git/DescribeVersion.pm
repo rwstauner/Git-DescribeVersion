@@ -100,6 +100,30 @@ A shell-glob-style pattern to match tags
 (default "v[0-9]*").  This is passed to C<git-describe> to help it
 find the right tag to count commits from.
 
+=head1 HISTORY / RATIONALE
+
+This module started out as a line in a Makefile:
+
+	VERSION = $(shell (cd $(srcdir); \
+		git describe --match 'v[0-9].[0-9]' --tags --long | \
+		grep -Eo 'v[0-9]+\.[0-9]+-[0-9]+' | tr - . | cut -c 2-))
+
+As soon as I wanted it in another Makefile
+(in another repo) I knew I had a problem.
+
+Then when I started learning L<Dist::Zilla>
+I realized that L<Dist::Zilla::Plugin::Git::NextVersion>
+was nice but not do what I wanted.
+
+I started by forking L<Dist::Zilla::Plugin::Git> on github,
+but realized that if I wrote the logic into a Dist::Zilla plugin
+it wouldn't be available to my git repos that weren't Perl distributions.
+
+So I wanted to extract the functionality to a module,
+include a Dist::Zilla VerionProvider plugin,
+and include a quick version that could be run with a minimal
+command line statement (so that I could put I<that> in my Makefiles).
+
 =head1 SEE ALSO
 
 =for :list
