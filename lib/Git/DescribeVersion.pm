@@ -131,3 +131,5 @@ command line statement (so that I could put I<that> in my Makefiles).
 * L<Dist::Zilla::Git::DescribeVersion>
 * L<Git::Wrapper>
 * L<http://www.git-scm.com>
+
+=cut
