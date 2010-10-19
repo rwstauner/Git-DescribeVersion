@@ -127,5 +127,7 @@ command line statement (so that I could put I<that> in my Makefiles).
 =head1 SEE ALSO
 
 =for :list
-* C<git>: L<http://www.git-scm.com|git>
+* L<Git::DescribeVersion::App>
+* L<Dist::Zilla::Git::DescribeVersion>
 * L<Git::Wrapper>
+* L<http://www.git-scm.com>
