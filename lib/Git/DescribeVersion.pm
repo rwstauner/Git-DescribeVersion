@@ -25,7 +25,8 @@ our %Defaults = (
 	version_regexp 	=> '^v(.+)$'
 );
 
-# TODO: attribute for returning dotted-decimal
+# TODO: Add attributes for the format to expect and return
+# (dotted decimal or floating point).
 
 sub new {
 	my ($class, $git, $attr) = @_;
@@ -44,10 +45,10 @@ sub version {
 }
 
 sub parse_version {
-  my ($self, $prefix, $count) = @_;
-  # quote 'version' to reference the module and not call the local sub
-  return 'version'->parse("v$prefix.$count")->numify;
-    #if $vstring =~ $version::LAX;
+	my ($self, $prefix, $count) = @_;
+	# quote 'version' to reference the module and not call the local sub
+	return 'version'->parse("v$prefix.$count")->numify;
+		#if $vstring =~ $version::LAX;
 }
 
 sub version_from_describe {
