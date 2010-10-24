@@ -99,7 +99,7 @@ which matches tags like C<"v0.1">.
 
 A shell-glob-style pattern to match tags
 (default "v[0-9]*").  This is passed to C<git-describe> to help it
-find the right tag to count commits from.
+find the right tag from which to count commits.
 
 =head1 HISTORY / RATIONALE
 
