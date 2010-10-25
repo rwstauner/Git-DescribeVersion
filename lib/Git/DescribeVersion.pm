@@ -53,6 +53,21 @@ sub new {
 	bless $self, $class;
 }
 
+=method parse_version
+
+A method to take the version parts found and return the end result.
+
+Uses the L<version> module to parse.
+
+=cut
+
+sub parse_version {
+	my ($self, $prefix, $count) = @_;
+	# quote 'version' to reference the module and not call the local sub
+	return 'version'->parse("v$prefix.$count")->numify;
+		#if $vstring =~ $version::LAX;
+}
+
 =method version
 
 The C<version> method is the main method of the class.
@@ -70,13 +85,6 @@ sub version {
 	my ($self) = @_;
 	return $self->version_from_describe() ||
 		$self->version_from_count_objects();
-}
-
-sub parse_version {
-	my ($self, $prefix, $count) = @_;
-	# quote 'version' to reference the module and not call the local sub
-	return 'version'->parse("v$prefix.$count")->numify;
-		#if $vstring =~ $version::LAX;
 }
 
 =method version_from_describe
