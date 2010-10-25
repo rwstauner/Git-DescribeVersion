@@ -33,7 +33,7 @@ sub provide_version {
 		keys %Git::DescribeVersion::Defaults };
 
 	my $new_ver = eval {
-		Git::DescribeVersion->new('.', $opts)->version;
+		Git::DescribeVersion->new($opts)->version;
 	};
 
 	$self->log_fatal("Could not determine version from tags: $@")

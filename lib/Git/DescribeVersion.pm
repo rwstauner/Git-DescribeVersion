@@ -4,7 +4,7 @@ package Git::DescribeVersion;
 =head1 SYNOPSIS
 
 	use Git::DescribeVersion ();
-	Git::DescribeVersion->new('.', {opt => 'value'});
+	Git::DescribeVersion->new({opt => 'value'});
 
 Or this one-liner:
 
@@ -29,12 +29,17 @@ our %Defaults = (
 # (dotted decimal or floating point).
 
 sub new {
-	my ($class, $git, $attr) = @_;
+	my $class = shift;
+	# accept a hash or hashref
+	my %opts = ref($_[0]) ? %{$_[0]} : @_;
 	my $self = {
-		git => (ref($git) ? $git : Git::Wrapper->new($git)),
 		%Defaults,
-		%$attr
+		# restrict accepted arguments
+		map { $_ => $opts{$_} } grep { exists($opts{$_}) } keys %Defaults
 	};
+	# accept a Git::Wrapper object or initialize one with 'directory'
+	$self->{git} ||= $opts{git_wrapper} ||
+		Git::Wrapper->new($opts{directory} || '.');
 	bless $self, $class;
 }
 
@@ -82,6 +87,10 @@ sub version_from_count_objects {
 =head1 OPTIONS
 
 These options can be passed to C<new()>:
+
+=head2 directory
+
+Directory in which git should operate.  Deafults to I<.>.
 
 =head2 first_version
 

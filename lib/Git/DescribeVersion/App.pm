@@ -11,13 +11,15 @@ sub import {
 }
 
 sub run {
-	my $opts = {};
+	my %env;
+	my %args = ref($_[0]) ? %{$_[0]} : @_;
 	foreach my $opt ( keys %Git::DescribeVersion::Defaults ){
+		# look for $ENV{GIT_DV_OPTION}
 		my $eopt = "\UGIT_DV_$opt";
-		$opts->{$opt} = $ENV{$eopt} if exists($ENV{$eopt});
+		$env{$opt} = $ENV{$eopt} if exists($ENV{$eopt});
 	}
 
-	print Git::DescribeVersion->new('.', $opts)->version, "\n";
+	print Git::DescribeVersion->new({%env, %args})->version, "\n";
 }
 
 1;
