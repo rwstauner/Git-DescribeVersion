@@ -30,4 +30,19 @@ Print out the version from L<Git::DescribeVersion> in one line:
 
 	perl -MGit::DescribeVersion::App -e run
 
+Arguments can be passed in a hash or hashref just like the constructor:
+
+	perl -MGit::DescribeVersion::App -e 'run(match_pattern => "rev-*")'
+
+Or can be environment variables spelled like I<GIT_DV_OPTION>:
+
+	export GIT_DV_MATCH_PATTERN="rev-*"
+	perl -MGit::DescribeVersion::App -e run
+
+This (hopefully) makes it easy for you to write
+the alias, function, Makefile or script that does exactly what you want.
+
+If not, feel free to send me suggestions (or patches)
+that you think would make it simpler or more powerful.
+
 =cut
