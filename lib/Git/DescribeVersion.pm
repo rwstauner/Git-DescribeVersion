@@ -4,11 +4,13 @@ package Git::DescribeVersion;
 =head1 SYNOPSIS
 
 	use Git::DescribeVersion ();
-	Git::DescribeVersion->new({opt => 'value'});
+	Git::DescribeVersion->new({opt => 'value'})->version();
 
 Or this one-liner:
 
 	perl -MGit::DescribeVersion::App -e run
+
+See L<Git::DescribeVersion::App> for more examples of that usage.
 
 =cut
 
@@ -25,6 +27,16 @@ our %Defaults = (
 	version_regexp 	=> '^v(.+)$'
 );
 
+=method new
+
+The constructor accepts a hash or hashref of options:
+
+	Git::DescribeVersion->new({opt => 'value'});
+	Git::DescribeVersion->new(opt1 => 'v1', opt2 => 'v2');
+
+See L</OPTIONS> for an explanation of the available options.
+
+=cut
 
 sub new {
 	my $class = shift;
@@ -41,6 +53,19 @@ sub new {
 	bless $self, $class;
 }
 
+=method version
+
+The C<version> method is the main method of the class.
+It attempts to return the repo version.
+
+It will first use L</version_from_describe>.
+
+If that fails it will try to simulate
+the functionality with L</version_from_count_objects>
+and will start the count from the I<first_version> option.
+
+=cut
+
 sub version {
 	my ($self) = @_;
 	return $self->version_from_describe() ||
@@ -53,6 +78,20 @@ sub parse_version {
 	return 'version'->parse("v$prefix.$count")->numify;
 		#if $vstring =~ $version::LAX;
 }
+
+=method version_from_describe
+
+Use C<git-describe> to count the number of commits since the last
+tag matching I<match_pattern>.
+
+It effectively calls
+
+	git describe --tags --long --match_pattern "match_pattern"
+
+If no matching tags are found (or some other error occurs)
+it will return undef.
+
+=cut
 
 sub version_from_describe {
 	my ($self) = @_;
@@ -68,6 +107,19 @@ sub version_from_describe {
 
 	return $self->parse_version($tag, $count);
 }
+
+=method version_from_count_objects
+
+Use C<git-count-objects> to count the number of commit objects
+in the repo.  It then appends this count to I<first_version>.
+
+It effectively calls
+
+	git count-objects -v
+
+It sums up the counts for 'count' and 'in-pack'.
+
+=cut
 
 sub version_from_count_objects {
 	my ($self) = @_;
