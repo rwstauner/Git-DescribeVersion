@@ -83,6 +83,6 @@ the last tag is 0.005 and you want to jump to 1.000 you can set V = 1.000.
 
 This code copied/modified from L<Dist::Zilla::Plugin::Git::NextVersion>.
 
-Thanks I<rjbs> and I<jquelin>!
+Thanks I<rjbs> and I<jquelin> (and many others)!
 
 =cut
