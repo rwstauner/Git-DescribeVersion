@@ -25,8 +25,6 @@ our %Defaults = (
 	version_regexp 	=> '^v(.+)$'
 );
 
-# TODO: Add attributes for the format to expect and return
-# (dotted decimal or floating point).
 
 sub new {
 	my $class = shift;
@@ -133,6 +131,15 @@ So I wanted to extract the functionality to a module,
 include a L<Dist::Zilla::Role::VerionProvider> plugin,
 and include a quick version that could be run with a minimal
 command line statement (so that I could put I<that> in my Makefiles).
+
+=head1 TODO
+
+=for :list
+* An attribute for specifying the output as floating point or dotted decimal.
+* Test different input formats with the L<version> module.
+* Add an attribute for input format if there is a need.
+* Write tests
+* Options for raising errors versus swallowing them?
 
 =head1 SEE ALSO
 
