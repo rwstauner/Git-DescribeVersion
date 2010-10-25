@@ -94,7 +94,7 @@ tag matching I<match_pattern>.
 
 It effectively calls
 
-	git describe --tags --long --match_pattern "match_pattern"
+	git describe --tags --long --match_pattern "${match_pattern}"
 
 If no matching tags are found (or some other error occurs)
 it will return undef.
@@ -125,7 +125,7 @@ It effectively calls
 
 	git count-objects -v
 
-It sums up the counts for 'count' and 'in-pack'.
+and sums up the counts for 'count' and 'in-pack'.
 
 =cut
 
@@ -144,28 +144,29 @@ sub version_from_count_objects {
 
 =head1 OPTIONS
 
-These options can be passed to C<new()>:
+These options can be passed to L</new>:
 
 =head2 directory
 
-Directory in which git should operate.  Deafults to I<.>.
+Directory in which git should operate.  Defaults to ".".
 
 =head2 first_version
 
 If the repository has no tags at all, this version
-is used as the first version for the distribution.  It defaults to "v0.1".
-Then git objects will be counted and appended to create a version like "v0.1.5".
+is used as the first version for the distribution.
+It defaults to C<v0.1>.  Then git objects will be counted
+and appended to create a version like C<v0.1.5>.
 
 =head2 version_regexp
 
 Regular expression that matches a tag containing
-a version.  It must capture the version into $1.  Defaults to C<^v([0-9._]+)$>
-which matches tags like C<"v0.1">.
+a version.  It must capture the version into C<$1>.
+Defaults to C<< ^v([0-9._]+)$ >> which matches tags like C<v0.1>.
 
 =head2 match_pattern
 
 A shell-glob-style pattern to match tags
-(default "v[0-9]*").  This is passed to C<git-describe> to help it
+(default C<< v[0-9]* >>).  This is passed to C<git-describe> to help it
 find the right tag from which to count commits.
 
 =head1 HISTORY / RATIONALE
@@ -180,8 +181,8 @@ As soon as I wanted it in another Makefile
 (in another repo) I knew I had a problem.
 
 Then when I started learning L<Dist::Zilla>
-I realized that L<Dist::Zilla::Plugin::Git::NextVersion>
-was nice but not do what I wanted.
+I found L<Dist::Zilla::Plugin::Git::NextVersion>
+but missed the functionality I was used to with C<git-describe>.
 
 I started by forking L<Dist::Zilla::Plugin::Git> on github,
 but realized that if I wrote the logic into a Dist::Zilla plugin
@@ -208,5 +209,6 @@ command line statement (so that I could put I<that> in my Makefiles).
 * L<Dist::Zilla::Git::DescribeVersion>
 * L<Git::Wrapper>
 * L<http://www.git-scm.com>
+* L<version>
 
 =cut
