@@ -45,4 +45,17 @@ the alias, function, Makefile or script that does exactly what you want.
 If not, feel free to send me suggestions (or patches)
 that you think would make it simpler or more powerful.
 
+=method run
+
+Convenience method for writing one-liners.
+
+Exported to main package.
+
+Accepts arguments in a hash or hashref
+which are passed to the constructor.
+
+Also looks for arguments in %ENV.
+
+See L</SYNOPSIS>.
+
 =cut
