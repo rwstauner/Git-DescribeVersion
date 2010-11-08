@@ -110,7 +110,15 @@ sub version_from_describe {
 		$self->{git}->describe(
 			{match => $self->{match_pattern}, tags => 1, long => 1}
 		);
-	} or return undef;
+	};
+	# usually you'll expect a tag to be found, so warn if it isn't
+	if( my $error = $@ ){
+		chomp($error);
+		warn("git-describe: $error\n");
+	}
+
+	# return nothing so we know to move on to count-objects
+	return unless $ver;
 
 	# ignore the -gSHA
 	my ($tag, $count) = ($ver =~ /^(.+?)-(\d+)-(g[0-9a-f]+)$/);
