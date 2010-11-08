@@ -6,6 +6,7 @@ our @EXPORT = qw(
 	&mock_gw
 	@versions
 	@commits
+	@counts
 );
 use Test::MockObject::Extends;
 
@@ -33,3 +34,34 @@ our @versions = map { [(split(/\s+/))[1,2]] } split(/\n/, <<TAGS);
 TAGS
 
 our @commits = qw(8 12 49 99 135 999 1234);
+
+# make sub-arrays like (['0', 'count: 0', 'size: 0'])
+our @counts = map { [split(/\n/)] } split(/\n\n/, <<COUNTS);
+204
+count: 204
+size: 816
+in-pack: 0
+packs: 0
+size-pack: 0
+prune-packable: 0
+garbage: 0
+
+1006
+count: 604
+size: 816
+in-pack: 402
+
+999
+count: 999
+in-pack: 0
+
+322
+count: 222
+in-pack: 100
+
+24
+count: 24
+
+7
+in-pack: 7
+COUNTS
