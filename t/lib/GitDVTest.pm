@@ -2,7 +2,16 @@ package GitDVTest;
 use strict;
 use Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(@versions @commits);
+our @EXPORT = qw(
+	&mock_gw
+	@versions
+	@commits
+);
+use Test::MockObject::Extends;
+
+sub mock_gw () {
+	return Test::MockObject::Extends->new( Git::Wrapper->new(".") );
+}
 
 # Should we be using version->parse->numify
 # instead of specifying the expectation explicitly?

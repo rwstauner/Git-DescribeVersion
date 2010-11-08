@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::MockObject::Extends;
 
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -10,8 +9,7 @@ use GitDVTest;
 my @tags = @versions;
 plan tests => @commits * @tags;
 
-my $mod = 'Git::Wrapper';
-my $mock = Test::MockObject::Extends->new( $mod->new(".") );
+my $mock = mock_gw;
 use Git::DescribeVersion;
 my $gv = Git::DescribeVersion->new(git_wrapper => $mock);
 
