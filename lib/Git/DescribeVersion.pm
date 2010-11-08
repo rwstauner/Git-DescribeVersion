@@ -63,6 +63,9 @@ Uses the L<version> module to parse.
 
 sub parse_version {
 	my ($self, $prefix, $count) = @_;
+	$prefix =~ s/$self->{version_regexp}/$1/
+		if $self->{version_regexp};
+
 	# quote 'version' to reference the module and not call the local sub
 	return 'version'->parse("v$prefix.$count")->numify;
 		#if $vstring =~ $version::LAX;
@@ -111,7 +114,6 @@ sub version_from_describe {
 
 	# ignore the -gSHA
 	my ($tag, $count) = ($ver =~ /^(.+?)-(\d+)-(g[0-9a-f]+)$/);
-	$tag =~ s/$self->{version_regexp}/$1/;
 
 	return $self->parse_version($tag, $count);
 }
