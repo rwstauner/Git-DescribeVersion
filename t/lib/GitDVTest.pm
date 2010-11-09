@@ -18,7 +18,7 @@ sub mock_gw () {
 # instead of specifying the expectation explicitly?
 
 # make sub-arrays like (['v0.1', '0.001'])
-our @versions = map { [(split(/\s+/))[1,2]] } split(/\n/, <<TAGS);
+our @versions = map { [(split(/\s+/))[1, 2, 3]] } split(/\n/, <<TAGS);
 	v0.1        0.001
 	v0.001      0.001
 	v1.2        1.002
@@ -31,6 +31,9 @@ our @versions = map { [(split(/\s+/))[1,2]] } split(/\n/, <<TAGS);
 	v1.002003   1.2003
 	v2.1        2.001
 	v2.1234     2.1234
+	ver-0.012   0.012   ver-(.+)
+	ver|3.222   3.222   ver\\|(.+)
+	4.1-rel1021   4.001   ([0-9.]+)-rel.+
 TAGS
 
 our @commits = qw(8 12 49 99 135 999 1234);
