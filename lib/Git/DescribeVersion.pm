@@ -207,9 +207,7 @@ command line statement (so that I could put I<that> in my Makefiles).
 
 =for :list
 * An attribute for specifying the output as floating point or dotted decimal.
-* Test different input formats with the L<version> module.
-* Add an attribute for input format if there is a need.
-* Write tests
+* Allow for more complex regexps (multiple groups) if there is a need.
 * Options for raising errors versus swallowing them?
 
 =head1 SEE ALSO
