@@ -24,7 +24,7 @@ our %Defaults = (
 	first_version 	=> 'v0.1',
 	match_pattern 	=> 'v[0-9]*',
 #	count_format 	=> 'v0.1.%d',
-	version_regexp 	=> '^\D*([0-9._]+)'
+	version_regexp 	=> '([0-9._]+)'
 );
 
 =method new
@@ -179,8 +179,9 @@ Defaults to C<< v0.1 >>.
 Regular expression that matches a tag containing
 a version.  It must capture the version into C<$1>.
 
-Defaults to C<< ^\D*([0-9._]+) >>
-which matches tags like C<v0.1>, C<rev-1.2>
+Defaults to C<< ([0-9._]+) >>
+which will simply capture the first dotted-decimal found.
+This matches tags like C<v0.1>, C<rev-1.2>
 and even C<release-2.0-skippy>.
 
 =head2 match_pattern
