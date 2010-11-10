@@ -74,13 +74,13 @@ sub parse_version {
 =method version
 
 The C<version> method is the main method of the class.
-It attempts to return the repo version.
+It attempts to return the repository version.
 
 It will first use L</version_from_describe>.
 
 If that fails it will try to simulate
 the functionality with L</version_from_count_objects>
-and will start the count from the I<first_version> option.
+and will start the count from the L</first_version> option.
 
 =cut
 
@@ -93,7 +93,7 @@ sub version {
 =method version_from_describe
 
 Use C<git-describe> to count the number of commits since the last
-tag matching I<match_pattern>.
+tag matching L</match_pattern>.
 
 It effectively calls
 
@@ -129,7 +129,7 @@ sub version_from_describe {
 =method version_from_count_objects
 
 Use C<git-count-objects> to count the number of commit objects
-in the repo.  It then appends this count to I<first_version>.
+in the repository.  It then appends this count to L</first_version>.
 
 It effectively calls
 
@@ -188,7 +188,7 @@ This module started out as a line in a Makefile:
 		grep -Eo 'v[0-9]+\.[0-9]+-[0-9]+' | tr - . | cut -c 2-))
 
 As soon as I wanted it in another Makefile
-(in another repo) I knew I had a problem.
+(in another repository) I knew I had a problem.
 
 Then when I started learning L<Dist::Zilla>
 I found L<Dist::Zilla::Plugin::Git::NextVersion>
@@ -196,7 +196,7 @@ but missed the functionality I was used to with C<git-describe>.
 
 I started by forking L<Dist::Zilla::Plugin::Git> on github,
 but realized that if I wrote the logic into a Dist::Zilla plugin
-it wouldn't be available to my git repos that weren't Perl distributions.
+it wouldn't be available to my git repositories that weren't Perl distributions.
 
 So I wanted to extract the functionality to a module,
 include a L<Dist::Zilla::Role::VerionProvider> plugin,
