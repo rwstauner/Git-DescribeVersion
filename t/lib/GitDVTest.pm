@@ -32,7 +32,7 @@ sub mock_gw () {
 # Should we be using version->parse->numify
 # instead of specifying the expectation explicitly?
 
-# make sub-arrays like (['v0.1', '0.001'])
+# make sub-arrays like (['v0.1', '0.001', 'version_regexp'])
 our @versions = map { [(split(/\s+/))[1, 2, 3]] } split(/\n/, <<TAGS);
 	v0.1        0.001
 	v0.001      0.001
@@ -47,9 +47,19 @@ our @versions = map { [(split(/\s+/))[1, 2, 3]] } split(/\n/, <<TAGS);
 	v2.1        2.001
 	v2.1234     2.1234
 	ver-0.012   0.012   ver-(.+)
+	ver-0.012   0.012
 	ver|3.222   3.222   ver\\|(.+)
+	ver|3.222   3.222
 	4.1-rel1021   4.001   ([0-9.]+)-rel.+
+	4.1-rel1021   4.001
+	4.1-rel10.21  10.021  rel(\\S+)
+	release-1.2-narf    1.002
+	release-1.4.2-narf  1.004  \\w+-([0-9.]+)\\.\\d-narf
+	SILLY1.4TAG   1.004
+	date-12.05-ver-10.21-foo  10.021  date-[0-9.]+-ver-([0-9.]+)-\\w+
+	date-12.05-ver-10.21-foo  12.005
 TAGS
+	#release-1.2-narf    1.     \\w+-(\\d+)\\.\\d-narf
 
 our @commits = qw(8 12 49 99 135 999 1234);
 
