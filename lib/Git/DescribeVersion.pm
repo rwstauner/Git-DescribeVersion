@@ -24,7 +24,7 @@ our %Defaults = (
 	first_version 	=> 'v0.1',
 	match_pattern 	=> 'v[0-9]*',
 #	count_format 	=> 'v0.1.%d',
-	version_regexp 	=> '^v(.+)$'
+	version_regexp 	=> '^\D*([0-9._]+)'
 );
 
 =method new
@@ -63,8 +63,12 @@ Uses the L<version> module to parse.
 
 sub parse_version {
 	my ($self, $prefix, $count) = @_;
-	$prefix =~ s/$self->{version_regexp}/$1/
-		if $self->{version_regexp};
+
+	# s//$1/ requires the regexp to be anchored.
+	# Doing a match and then assigning to $1 does not.
+	if( $self->{version_regexp} && $prefix =~ /$self->{version_regexp}/ ){
+		$prefix = $1;
+	}
 
 	# quote 'version' to reference the module and not call the local sub
 	return 'version'->parse("v$prefix.$count")->numify;
@@ -171,7 +175,10 @@ and appended to create a version like C<v0.1.5>.
 
 Regular expression that matches a tag containing
 a version.  It must capture the version into C<$1>.
-Defaults to C<< ^v([0-9._]+)$ >> which matches tags like C<v0.1>.
+
+Defaults to C<< ^\D*([0-9._]+) >>
+which matches tags like C<v0.1>, C<rev-1.2>
+and even C<release-2.0-skippy>.
 
 =head2 match_pattern
 
