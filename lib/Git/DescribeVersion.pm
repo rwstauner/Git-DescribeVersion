@@ -168,8 +168,11 @@ Directory in which git should operate.  Defaults to ".".
 
 If the repository has no tags at all, this version
 is used as the first version for the distribution.
-It defaults to C<v0.1>.  Then git objects will be counted
+
+Then git objects will be counted
 and appended to create a version like C<v0.1.5>.
+
+Defaults to C<< v0.1 >>.
 
 =head2 version_regexp
 
@@ -182,9 +185,11 @@ and even C<release-2.0-skippy>.
 
 =head2 match_pattern
 
-A shell-glob-style pattern to match tags
-(default C<< v[0-9]* >>).  This is passed to C<git-describe> to help it
+A shell-glob-style pattern to match tags.
+This is passed to C<git-describe> to help it
 find the right tag from which to count commits.
+
+Defaults to C<< v[0-9]* >>.
 
 =head1 HISTORY / RATIONALE
 
