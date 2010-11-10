@@ -19,11 +19,7 @@ foreach my $version ( @versions ){
 		my ($sum, @lines) = @$count;
 		$mock->mock('count_objects', sub { @lines });
 
-		my ($key, $val, $regexp) = @$version;
-		# hack
-		$gv->{version_regexp} = $regexp ||
-			$Git::DescribeVersion::Defaults{version_regexp};
-		my $exp = sprintf("%s%03d", $val, $sum);
-		is($gv->version, $exp, sprintf("describe %-15s as %-15s", "$key-${sum}", $exp));
+		my ($exp, $desc) = expectation($gv, $version, $sum);
+		is($gv->version, $exp, $desc);
 	}
 }

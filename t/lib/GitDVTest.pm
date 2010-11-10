@@ -3,12 +3,27 @@ use strict;
 use Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(
+	&expectation
 	&mock_gw
 	@versions
 	@commits
 	@counts
 );
 use Test::MockObject::Extends;
+
+sub expectation ($$$) {
+	my ($gv, $version, $count) = @_;
+	my ($key, $val, $regexp) = @$version;
+
+	# hack
+	$gv->{version_regexp} = $regexp ||
+		$Git::DescribeVersion::Defaults{version_regexp};
+
+	my $exp = sprintf("%s%03d", $val, $count);
+	#$exp = sprintf("%0.6f", $exp) if length(substr($exp, rindex($exp, '.')+1)) < 6;
+	my $desc = sprintf("describe %-15s as %-15s", "$key-$count", $exp);
+	return ($exp, $desc);
+}
 
 sub mock_gw () {
 	return Test::MockObject::Extends->new( Git::Wrapper->new(".") );
