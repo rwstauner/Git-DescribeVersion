@@ -1,5 +1,5 @@
 package Dist::Zilla::Plugin::Git::DescribeVersion;
-# ABSTRACT: provide a version number by using the git-describe command
+# ABSTRACT: provide version using git-describe
 
 # I don't know much about Dist::Zilla or Moose.
 # This code copied/modified from Dist::Zilla::Plugin::Git::NextVersion.
