@@ -11,6 +11,11 @@ sub import {
 }
 
 sub run {
+	# allow usage as Git::DescribeVersion::App->run()
+	# (for consistency with other App's)
+	# and simply discard the unused argument
+	shift(@_) if @_ && $_[0] eq __PACKAGE__;
+
 	my %env;
 	my %args = ref($_[0]) ? %{$_[0]} : @_;
 	foreach my $opt ( keys %Git::DescribeVersion::Defaults ){
