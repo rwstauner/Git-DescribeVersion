@@ -57,7 +57,7 @@ sub new {
 
 A method to take the version parts found and return the end result.
 
-Uses the L<version> module to parse.
+Uses the L<version|version> module to parse.
 
 =cut
 
