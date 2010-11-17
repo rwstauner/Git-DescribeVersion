@@ -227,7 +227,7 @@ command line statement (so that I could put I<that> in my Makefiles).
 
 =for :list
 * L<Git::DescribeVersion::App>
-* L<Dist::Zilla::Git::DescribeVersion>
+* L<Dist::Zilla::Plugin::Git::DescribeVersion>
 * L<Git::Wrapper>
 * L<http://www.git-scm.com>
 * L<version>
