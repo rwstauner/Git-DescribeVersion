@@ -63,4 +63,9 @@ Also looks for arguments in %ENV.
 
 See L</SYNOPSIS>.
 
+=head1 SEE ALSO
+
+=for :list
+* L<Git::DescribeVersion>
+
 =cut
