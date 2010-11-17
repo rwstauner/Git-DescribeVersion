@@ -9,7 +9,7 @@ our @EXPORT = qw(
 	@commits
 	@counts
 );
-use Test::MockObject::Extends;
+use Test::MockObject::Extends 1.09;
 
 sub expectation ($$$) {
 	my ($gv, $version, $count) = @_;
