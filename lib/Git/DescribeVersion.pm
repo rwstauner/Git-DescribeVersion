@@ -208,11 +208,11 @@ I found L<Dist::Zilla::Plugin::Git::NextVersion>
 but missed the functionality I was used to with C<git-describe>.
 
 I started by forking L<Dist::Zilla::Plugin::Git> on github,
-but realized that if I wrote the logic into a Dist::Zilla plugin
+but realized that if I wrote the logic into a L<Dist::Zilla> plugin
 it wouldn't be available to my git repositories that weren't Perl distributions.
 
 So I wanted to extract the functionality to a module,
-include a L<Dist::Zilla::Role::VerionProvider> plugin,
+make a separate L<Dist::Zilla::Role::VerionProvider> plugin,
 and include a quick version that could be run with a minimal
 command line statement (so that I could put I<that> in my Makefiles).
 
