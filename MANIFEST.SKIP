@@ -1,6 +1,4 @@
 ^dist.ini
-^weaver.ini
 ^dist-zilla-plugin
 README.pod
-README.markdown
 MANIFEST.SKIP
