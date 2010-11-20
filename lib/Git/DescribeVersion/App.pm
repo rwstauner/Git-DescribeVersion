@@ -1,5 +1,5 @@
 package Git::DescribeVersion::App;
-# ABSTRACT: run Git::DescribeVersion as one-line script
+# ABSTRACT: Run Git::DescribeVersion as one-line script
 
 use strict;
 use warnings;
