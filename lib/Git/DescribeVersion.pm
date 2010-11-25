@@ -156,6 +156,8 @@ sub version_from_count_objects {
 
 1;
 
+=for stopwords repo's todo
+
 =head1 OPTIONS
 
 These options can be passed to L</new>:
