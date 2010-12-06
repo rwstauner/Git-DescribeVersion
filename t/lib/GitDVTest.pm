@@ -26,7 +26,9 @@ sub expectation ($$$) {
 }
 
 sub mock_gw () {
-	return Test::MockObject::Extends->new( Git::Wrapper->new(".") );
+	my $mock = Test::MockObject->new();
+	$mock->fake_module('Git::Wrapper');
+	$mock;
 }
 
 # Should we be using version->parse->numify
