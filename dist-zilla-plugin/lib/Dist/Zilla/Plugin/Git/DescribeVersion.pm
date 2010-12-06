@@ -51,6 +51,8 @@ no Moose;
 =for Pod::Coverage
     provide_version
 
+=for stopwords RJBS JQUELIN
+
 =head1 SYNOPSIS
 
 In your F<dist.ini>:
@@ -84,6 +86,6 @@ the last tag is 0.005 and you want to jump to 1.000 you can set V = 1.000.
 
 This code copied/modified from L<Dist::Zilla::Plugin::Git::NextVersion>.
 
-Thanks I<rjbs> and I<jquelin> (and many others)!
+Thanks I<RJBS> and I<JQUELIN> (and many others)!
 
 =cut
