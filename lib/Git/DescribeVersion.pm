@@ -17,7 +17,6 @@ See L<Git::DescribeVersion::App> for more examples of that usage.
 use strict;
 use warnings;
 
-use Git::Wrapper;
 use version 0.77 ();
 
 our %Defaults = (
@@ -47,11 +46,89 @@ sub new {
 		# restrict accepted arguments
 		map { $_ => $opts{$_} } grep { exists($opts{$_}) } keys %Defaults
 	};
-	# accept a Git::Wrapper object or initialize one with 'directory'
-	$self->{git} ||= $opts{git_wrapper} ||
-		Git::Wrapper->new($opts{directory} || '.');
+
+	$self->{directory} = $opts{directory} || '.';
+	# accept a Git::Repository or Git::Wrapper object (or command to exec)
+	# or a simple '1' (true value) to indicate which one is desired
+	foreach my $mod ( qw(git_repository git_wrapper git_backticks) ){
+		if( $opts{$mod} ){
+			$self->{git} = $mod;
+			# if it's just a true value leave it blank so we create later
+			$self->{$mod} = $opts{$mod}
+				unless $opts{$mod} eq '1';
+		}
+	}
 	bless $self, $class;
 }
+
+=method git
+
+A method to wrap the git commands.
+Attempts to use L<Git::Repository> or L<Git::Wrapper>.
+Falls back to using backticks.
+
+=cut
+
+# NOTE: the git* subs are called in list context
+
+sub git {
+	my ($self) = @_;
+	unless( $self->{git} ){
+		# Git::Repository is easier to install than Git::Wrapper
+		if( eval 'require Git::Repository; 1' ){
+			$self->{git} = 'git_repository';
+		}
+		elsif( eval 'require Git::Wrapper; 1' ){
+			$self->{git} = 'git_wrapper';
+		}
+		else {
+			$self->{git} = 'git_backticks';
+		}
+	}
+	goto &{$self->{git}};
+}
+
+sub git_backticks {
+	my ($self, $command, @args) = @_;
+	warn("'directory' attribute not supported when using backticks.\n" .
+		"Consider installing Git::Repository or Git::Wrapper.\n")
+			if $self->{directory} && $self->{directory} ne '.';
+
+	my $exec = join(' ',
+		map { quotemeta }
+			# the external app to run
+			($self->{git_backticks} ||= 'git'),
+			$command,
+			map { ref $_ ? @$_ : $_ } @args
+	);
+
+	return (`$exec`);
+}
+
+sub git_repository {
+	my ($self, $command, @args) = @_;
+	(
+		$self->{git_repository} ||=
+			Git::Repository->new(work_tree => $self->{directory})
+	)
+		->run($command,
+			map { ref $_ ? @$_ : $_ } @args
+		);
+}
+
+sub git_wrapper {
+	my ($self, $command, @args) = @_;
+	$command =~ tr/-/_/;
+	(
+		$self->{git_wrapper} ||=
+			Git::Wrapper->new($self->{directory})
+	)
+		->$command({
+			map { ($$_[0] =~ /^-{0,2}(.+)$/, $$_[1]) }
+				map { ref $_ ? $_ : [$_ => 1] } @args
+		});
+}
+
 
 =method parse_version
 
@@ -119,13 +196,14 @@ Returns a list of pieces which should be passed to L</parse_version>.
 sub version_from_describe {
 	my ($self) = @_;
 	my ($ver) = eval {
-		$self->{git}->describe(
-			{match => $self->{match_pattern}, tags => 1, long => 1}
+		$self->git('describe',
+			['--match' => $self->{match_pattern}], qw(--tags --long)
 		);
 	};
 	# usually you'll expect a tag to be found, so warn if it isn't
 	if( my $error = $@ ){
 		chomp($error);
+		$error =~ s! at .+Git/DescribeVersion.pm line \d+$!!;
 		warn("git-describe: $error\n");
 	}
 
@@ -155,7 +233,7 @@ Returns a list of pieces which should be passed to L</parse_version>.
 
 sub version_from_count_objects {
 	my ($self) = @_;
-	my @counts = $self->{git}->count_objects({v => 1});
+	my @counts = $self->git(qw(count-objects -v));
 	my $count = 0;
 	local $_;
 	foreach (@counts){
@@ -165,6 +243,8 @@ sub version_from_count_objects {
 }
 
 1;
+
+=for Pod::Coverage git_backticks git_repository git_wrapper
 
 =for stopwords repo's todo
 
@@ -240,7 +320,7 @@ command line statement (so that I could put I<that> in my Makefiles).
 =for :list
 * L<Git::DescribeVersion::App>
 * L<Dist::Zilla::Plugin::Git::DescribeVersion>
-* L<Git::Wrapper>
+* L<Git::Repository> or L<Git::Wrapper>
 * L<http://www.git-scm.com>
 * L<version>
 
