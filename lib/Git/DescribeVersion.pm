@@ -184,7 +184,7 @@ tag matching L</match_pattern>.
 
 It effectively calls
 
-	git describe --tags --long --match "${match_pattern}"
+	git describe --match "${match_pattern}" --tags --long
 
 If no matching tags are found (or some other error occurs)
 it will return undef.
