@@ -13,6 +13,7 @@ my @tests = (
 	[3.4,     undef, '3.004000',    {first_version => '2.1.3'}],
 	['v3.4',  undef, '3.004000',    {first_version => '2.1.3'}],
 	['3.4.4', undef, '3.004004000', {}],
+	['3.4.4', undef, 'v3.4.4.0',    {format => 'v'}],
 	[undef,   undef, undef,         {first_version => undef}],
 
 	['x',       'y', undef,         {}],

@@ -22,7 +22,7 @@ use version 0.77 ();
 our %Defaults = (
 	first_version 	=> 'v0.1',
 	match_pattern 	=> 'v[0-9]*',
-#	count_format 	=> 'v0.1.%d',
+	format 			=> 'decimal',
 	version_regexp 	=> '([0-9._]+)'
 );
 
@@ -165,19 +165,22 @@ sub parse_version {
 	my $vstring = "v$prefix.$count";
 
 	# quote 'version' to reference the module and not call the local sub
-	my $version = eval {
+	my $vobject = eval {
 		'version'->parse($vstring)
 			#if version::is_lax($vstring); # version 0.82
 	};
 
 	# Don't die if it's not parseable, just return nothing.
-	if( my $error = $@ || !$version ){
+	if( my $error = $@ || !$vobject ){
 		$error = $self->prepare_warning($error);
 		warn("Version '$vstring' not a valid version string.\n$error");
 		return;
 	}
 
-	return $version->numify;
+	my $format = $self->{format} =~ /dot|normal|v|string/ ? 'normal' : 'numify';
+	my $version = $vobject->$format;
+	$version =~ s/^v// if $self->{format} =~ /no-?v/;
+	return $version;
 }
 
 # normalize error message
