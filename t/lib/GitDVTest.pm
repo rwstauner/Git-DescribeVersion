@@ -22,7 +22,7 @@ sub expectation ($$$) {
 	$gv->{version_regexp} = $regexp ||
 		$Git::DescribeVersion::Defaults{version_regexp};
 
-	my $exp    = defined $dec ? sprintf("%s%03d", $dec, $count)       : undef;
+	my $exp    = defined $dec ? sprintf(($dec =~ /\./ ? "%s%03d" : "%s.%03d000"), $dec, $count): undef;
 	my $dotted = defined $dot ? version->parse("$dot.$count")->normal : undef;
 	my %values = (
 		decimal => $exp,
@@ -75,11 +75,11 @@ our @versions = map { [(split(/\s+/))[1, 2, 3, 4]] } split(/\n/, <<TAGS);
 	4.1-rel10.21              10.021    v10.21     rel(\\S+)
 	release-1.2-narf          1.002     v1.2
 	release-1.4.2-narf        1.004     v1.4       \\w+-([0-9.]+)\\.\\d-narf
+	release-1.2-narf          1         v1         \\w+-(\\d+)\\.\\d-narf
 	SILLY1.4TAG               1.004     v1.4
 	date-12.05-ver-10.21-foo  10.021    v10.21     date-[0-9.]+-ver-([0-9.]+)-\\w+
 	date-12.05-ver-10.21-foo  12.005    v12.5
 TAGS
-	#release-1.2-narf    1.     \\w+-(\\d+)\\.\\d-narf
 
 our @commits = qw(8 12 49 99 135 999 1234);
 

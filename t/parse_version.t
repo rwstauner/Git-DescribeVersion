@@ -7,7 +7,7 @@ use lib "$FindBin::Bin/lib";
 use GitDVTest;
 
 my @tests = (
-	#[1,           2, '1',        'v1',           {}],
+	[1,           2, '1',        'v1',           {}],
 	[1.2,         3, '1.002',    'v1.2',         {}],
 
 	[undef,   undef, '0.001',    'v0.1',         {}],
