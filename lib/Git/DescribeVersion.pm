@@ -269,6 +269,9 @@ is used as the first version for the distribution.
 Then git objects will be counted
 and appended to create a version like C<v0.1.5>.
 
+If set to C<undef> then L</version> will return undef
+if L</version_from_describe> cannot determine a value.
+
 Defaults to C<< v0.1 >>.
 
 =head2 version_regexp
