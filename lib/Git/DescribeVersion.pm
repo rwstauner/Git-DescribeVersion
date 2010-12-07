@@ -299,6 +299,23 @@ if L</version_from_describe> cannot determine a value.
 
 Defaults to C<< v0.1 >>.
 
+=head2 format
+
+Specify the output format for the version number.
+
+I had trouble determining the most reasonable names
+for the formats so a few variations are possible.
+
+=for :list
+* C<dotted>, C<normal>, C<v-string> or C<v>
+for values like C<< v1.2.3 >>.
+* C<no-vstring> (or C<no-v> or C<no_v>)
+to discard the opening C<v> for values like C<< 1.2.3 >>.
+* C<decimal>
+for values like C<< 1.002003 >>.
+
+Defaults to C<decimal> for compatibility.
+
 =head2 version_regexp
 
 Regular expression that matches a tag containing
@@ -344,7 +361,6 @@ command line statement (so that I could put I<that> in my Makefiles).
 =head1 TODO
 
 =for :list
-* An attribute for specifying the output as floating point or dotted decimal.
 * Allow for more complex regexps (multiple groups) if there is a need.
 * Options for raising errors versus swallowing them?
 
