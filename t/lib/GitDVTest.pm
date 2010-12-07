@@ -15,7 +15,8 @@ use version 0.77;
 
 sub expectation ($$$) {
 	my ($gv, $version, $count) = @_;
-	my ($key, $dec, $dot, $regexp) = @$version;
+	my ($tag, $dec, $dot, $regexp) = @$version;
+	$tag = '~' if !defined $tag;
 	$count = 0 if !defined $count;
 
 	# hack
@@ -30,7 +31,8 @@ sub expectation ($$$) {
 		no_v    => (defined $dotted ? substr($dotted, 1) : undef),
 	);
 	return { map {
-		($_ => [$values{$_}, sprintf("describe %-15s in %s as %-15s", "$key-$count", $_, $values{$_})])
+		($_ => [$values{$_}, sprintf("describe %-15s in %s as %-15s",
+			"$tag-$count", $_, defined $values{$_} ? $values{$_} : '~')])
 	} keys %values };
 }
 
