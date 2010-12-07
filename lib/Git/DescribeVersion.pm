@@ -141,6 +141,21 @@ Uses the L<version|version> module to parse.
 sub parse_version {
 	my ($self, $prefix, $count) = @_;
 
+	# This is unlikely as it should mean that both git commands
+	# returned unexpected output.  If it does happen, don't die
+	# trying to parse it, default to first_version.
+	$prefix = $self->{first_version}
+		unless defined $prefix;
+	$count  = 0
+		unless defined $count;
+
+	# If still undef (first_version explicitly set to undef)
+	# don't die trying to parse it, just return nothing.
+	unless( defined $prefix ){
+		warn("Version could not be determined.\n");
+		return;
+	}
+
 	# s//$1/ requires the regexp to be anchored.
 	# Doing a match and then assigning to $1 does not.
 	if( $self->{version_regexp} && $prefix =~ /$self->{version_regexp}/ ){
