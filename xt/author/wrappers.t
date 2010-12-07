@@ -28,11 +28,6 @@ my @tests = (
 plan tests => @tests * 3 - 1; # 3 each but no require_ok() on last one
 
 my $git_describe_warning = 'fatal: No names found, cannot describe anything.';
-# I tried testing STDERR for the warning but it breaks with Git::Wrapper...
-# Git::Repository fixes this on its own
-# (see top of Git::Repository::Command source code)
-# but it wasn't worth messing with it for this test.
-diag("${\ scalar @tests } warnings of '$git_describe_warning' expected.");
 
 foreach my $test ( @tests ){
 	my ($opt, $mod) = @$test;
@@ -45,6 +40,13 @@ foreach my $test ( @tests ){
 
 	foreach my $command ( keys %$opts ){
 		$gdv = Git::DescribeVersion->new(%{ $opts->{$command} }, $opt => 1);
+
+		# I tried testing STDERR for the warning but it breaks with Git::Wrapper...
+		# Git::Repository fixes this on its own
+		# (see top of Git::Repository::Command source code)
+		# but it wasn't worth messing with it for this test.
+		diag("warning expected:") if $command eq 'count objects';
+
 		like($gdv->version, qr/0.001\d{3,}/, "$mod $command");
 	}
 }

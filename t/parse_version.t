@@ -26,5 +26,7 @@ foreach my $test ( @tests ){
 	my ($prefix, $count, $exp, $opts) = @$test;
 	my $gdv = $mod->new($opts);
 	isa_ok($gdv, $mod);
+	# TODO: test stderr ?
+	diag("warning expected:") if !defined $exp;
 	is($gdv->parse_version($prefix, $count), $exp, 'parse_version');
 }
