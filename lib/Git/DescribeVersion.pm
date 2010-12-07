@@ -167,14 +167,8 @@ and will start the count from the L</first_version> option.
 
 sub version {
 	my ($self) = @_;
-
-	my @parts = $self->version_from_describe();
-
-	if( !@parts ){
-	   @parts = $self->version_from_count_objects();
-	}
-
-	$self->parse_version(@parts);
+	return $self->version_from_describe() ||
+		$self->version_from_count_objects();
 }
 
 =method version_from_describe
@@ -188,8 +182,6 @@ It effectively calls
 
 If no matching tags are found (or some other error occurs)
 it will return undef.
-
-Returns a list of pieces which should be passed to L</parse_version>.
 
 =cut
 
@@ -208,12 +200,12 @@ sub version_from_describe {
 	}
 
 	# return nothing so we know to move on to count-objects
-	return () unless $ver;
+	return unless $ver;
 
 	# ignore the -gSHA
 	my ($tag, $count) = ($ver =~ /^(.+?)-(\d+)-(g[0-9a-f]+)$/);
 
-	return ($tag, $count);
+	return $self->parse_version($tag, $count);
 }
 
 =method version_from_count_objects
@@ -227,8 +219,6 @@ It effectively calls
 
 and sums up the counts for 'count' and 'in-pack'.
 
-Returns a list of pieces which should be passed to L</parse_version>.
-
 =cut
 
 sub version_from_count_objects {
@@ -239,7 +229,7 @@ sub version_from_count_objects {
 	foreach (@counts){
 		/(count|in-pack): (\d+)/ and $count += $2;
 	}
-	return ($self->{first_version}, $count);
+	return $self->parse_version($self->{first_version}, $count);
 }
 
 1;
