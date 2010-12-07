@@ -11,11 +11,14 @@ my @tests = (
 	[undef,       3, '2.001003',    {first_version => '2.1'}],
 	[undef,       4, '2.001003004', {first_version => '2.1.3'}],
 	[3.4,     undef, '3.004000',    {first_version => '2.1.3'}],
+	['v3.4',  undef, '3.004000',    {first_version => '2.1.3'}],
 	['3.4.4', undef, '3.004004000', {}],
 	[undef,   undef, undef,         {first_version => undef}],
-);
 
-# TODO: handle and test bad strings
+	['x',       'y', undef,         {}],
+	[' ',     '201', undef,         {}],
+	['4',     'ppp', undef,         {}],
+);
 
 plan tests => @tests * 2 + 1; # tests * (is + isa) + require_ok
 
@@ -26,7 +29,6 @@ foreach my $test ( @tests ){
 	my ($prefix, $count, $exp, $opts) = @$test;
 	my $gdv = $mod->new($opts);
 	isa_ok($gdv, $mod);
-	# TODO: test stderr ?
 	diag("warning expected:") if !defined $exp;
 	is($gdv->parse_version($prefix, $count), $exp, 'parse_version');
 }

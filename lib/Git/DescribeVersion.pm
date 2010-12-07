@@ -162,9 +162,22 @@ sub parse_version {
 		$prefix = $1;
 	}
 
+	my $vstring = "v$prefix.$count";
+
 	# quote 'version' to reference the module and not call the local sub
-	return 'version'->parse("v$prefix.$count")->numify;
-		#if $vstring =~ $version::LAX;
+	my $version = eval {
+		'version'->parse($vstring)
+			#if version::is_lax($vstring); # version 0.82
+	};
+
+	# Don't die if it's not parseable, just return nothing.
+	if( my $error = $@ || !$version ){
+		$error = $self->prepare_warning($error);
+		warn("Version '$vstring' not a valid version string.\n$error");
+		return;
+	}
+
+	return $version->numify;
 }
 
 # normalize error message
