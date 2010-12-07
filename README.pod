@@ -4,9 +4,10 @@ A perl module for determining a git repo's current version
 based on the C<git-describe> command
 which counts commits from the most recent tag.
 
-Use the included I<Dist::Zilla::Plugin::Git::DescribeVersion>
-as a VersionProvider in dist-zilla projects,
-or put a line like this in the Makefile of other projects:
+Use the included L<Dist::Zilla::Plugin::Git::DescribeVersion>
+as a L<VersionProvider|Dist::Zilla::Role::VersionProvider>
+in L<Dist::Zilla> projects,
+or put a line like this in the F<Makefile> of other projects:
 
 	VERSION = $(shell perl -MGit::DescribeVersion::App -e run)
 
