@@ -167,6 +167,16 @@ sub parse_version {
 		#if $vstring =~ $version::LAX;
 }
 
+# normalize error message
+
+sub prepare_warning {
+	my ($self, $error) = @_;
+	return '' unless $error;
+	$error =~ s/ at \S+?\.pm line \d+\.?\s*$//;
+	chomp($error);
+	return $error . "\n";
+}
+
 =method version
 
 The C<version> method is the main method of the class.
@@ -209,9 +219,8 @@ sub version_from_describe {
 	};
 	# usually you'll expect a tag to be found, so warn if it isn't
 	if( my $error = $@ ){
-		chomp($error);
-		$error =~ s! at .+Git/DescribeVersion.pm line \d+$!!;
-		warn("git-describe: $error\n");
+		$error = $self->prepare_warning($error);
+		warn("git-describe: $error");
 	}
 
 	# return nothing so we know to move on to count-objects
@@ -249,7 +258,7 @@ sub version_from_count_objects {
 
 1;
 
-=for Pod::Coverage git_backticks git_repository git_wrapper
+=for Pod::Coverage git_backticks git_repository git_wrapper prepare_warning
 
 =for stopwords repo's todo
 
