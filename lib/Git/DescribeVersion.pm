@@ -179,7 +179,7 @@ sub parse_version {
 
 	my $format = $self->{format} =~ /dot|normal|v|string/ ? 'normal' : 'numify';
 	my $version = $vobject->$format;
-	$version =~ s/^v// if $self->{format} =~ /no-?v/;
+	$version =~ s/^v// if $self->{format} =~ /no.?v/;
 	return $version;
 }
 
