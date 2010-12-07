@@ -3,6 +3,7 @@ use strict;
 use Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(
+	&expect_warning
 	&expectation
 	&test_expectations
 	&mock_gw
@@ -10,8 +11,30 @@ our @EXPORT = qw(
 	@commits
 	@counts
 );
+use Test::More;
 use Test::MockObject::Extends 1.09;
 use version 0.77;
+
+my $test_warn_mod = 'Test::Output';
+my $test_warn = eval "use $test_warn_mod; 1";
+$test_warn = 0 if $@;
+
+sub expect_warning ($$;$) {
+	my $sub = pop @_;
+	my ($regexp, $message) = @_;
+	$message ||= 'warning expected:';
+
+	if( $test_warn ){
+		stderr_like($sub, $regexp, $message);
+	}
+	else {
+		# skip the test, but still run the coderef
+		SKIP: { skip "$test_warn_mod required for testing warnings", 1; }
+		# mention that we're expecting a warning
+		diag($message);
+		&$sub;
+	}
+}
 
 sub expectation ($$$) {
 	my ($gv, $version, $count) = @_;
