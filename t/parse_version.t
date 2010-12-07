@@ -32,7 +32,8 @@ my @tests = (
 	['4',     'ppp', undef,         undef,       {}],
 );
 
-plan tests => @tests * (3 + 1) + 1; # tests * (formats + isa) + require_ok
+# tests * (formats + isa) + (formats * warnings) + require_ok
+plan tests => @tests * (3 + 1) + (3 * grep { !defined $$_[2] } @tests) + 1;
 
 my $mod = 'Git::DescribeVersion';
 require_ok($mod);
@@ -43,7 +44,14 @@ foreach my $test ( @tests ){
 	isa_ok($gdv, $mod);
 test_expectations($gdv, [$prefix, $dec, $dot], $count, sub {
 	my ($exp, $desc) = @_;
-	diag("warning expected:") if !defined $exp;
-	is($gdv->parse_version($prefix, $count), $exp, $desc);
+
+	my $parsed;
+	my $parse = sub { $parsed = $gdv->parse_version($prefix, $count); };
+
+	defined $exp
+		? &$parse
+		: expect_warning qr/^Version/, $parse;
+
+	is($parsed, $exp, $desc);
 });
 }
