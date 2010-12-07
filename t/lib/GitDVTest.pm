@@ -16,17 +16,18 @@ use version 0.77;
 sub expectation ($$$) {
 	my ($gv, $version, $count) = @_;
 	my ($key, $dec, $dot, $regexp) = @$version;
+	$count = 0 if !defined $count;
 
 	# hack
 	$gv->{version_regexp} = $regexp ||
 		$Git::DescribeVersion::Defaults{version_regexp};
 
-	my $exp = sprintf("%s%03d", $dec, $count);
-	my $dotted = version->parse("$dot.$count")->normal;
+	my $exp    = defined $dec ? sprintf("%s%03d", $dec, $count)       : undef;
+	my $dotted = defined $dot ? version->parse("$dot.$count")->normal : undef;
 	my %values = (
 		decimal => $exp,
 		dotted  => $dotted,
-		no_v    => substr($dotted, 1)
+		no_v    => (defined $dotted ? substr($dotted, 1) : undef),
 	);
 	return { map {
 		($_ => [$values{$_}, sprintf("describe %-15s in %s as %-15s", "$key-$count", $_, $values{$_})])
