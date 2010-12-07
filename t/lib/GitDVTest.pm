@@ -4,6 +4,7 @@ use Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(
 	&expectation
+	&test_expectations
 	&mock_gw
 	@versions
 	@commits
@@ -30,6 +31,15 @@ sub expectation ($$$) {
 	return { map {
 		($_ => [$values{$_}, sprintf("describe %-15s in %s as %-15s", "$key-$count", $_, $values{$_})])
 	} keys %values };
+}
+
+sub test_expectations ($$$&) {
+	my ($gv, $version, $commits, $sub) = @_;
+	my $exps = expectation($gv, $version, $commits);
+	while( my ($format, $expdesc) = each %$exps ){
+		$gv->{format} = $format;
+		$sub->(@$expdesc);
+	}
 }
 
 sub mock_gw () {

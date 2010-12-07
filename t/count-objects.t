@@ -6,7 +6,7 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use GitDVTest;
 
-plan tests => (@counts + 1) * @versions;
+plan tests => (@counts * 3 + 1) * @versions; # (counts * formats + isa) * versions
 my $mock = mock_gw;
 $mock->set_always('describe', undef);
 
@@ -20,7 +20,9 @@ foreach my $version ( @versions ){
 		my ($sum, @lines) = @$count;
 		$mock->mock('count_objects', sub { @lines });
 
-		my ($exp, $desc) = expectation($gv, $version, $sum);
+	test_expectations($gv, $version, $sum, sub {
+		my ($exp, $desc) = @_;
 		is($gv->version, $exp, $desc);
+	});
 	}
 }
