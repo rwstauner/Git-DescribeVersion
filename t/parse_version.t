@@ -50,7 +50,11 @@ test_expectations($gdv, [$prefix, $dec, $dot], $count, sub {
 
 	defined $exp
 		? &$parse
-		: expect_warning qr/^Version/, $parse;
+		: expect_warning(
+			(exists $opts->{first_version} && !defined($opts->{first_version})
+				? qr/could not be determined/
+				: qr/not a valid version string/),
+			$parse);
 
 	is($parsed, $exp, $desc);
 });
