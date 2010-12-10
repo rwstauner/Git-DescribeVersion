@@ -307,14 +307,14 @@ I had trouble determining the most reasonable names
 for the formats so a few variations are possible.
 
 =for :list
-* C<dotted>, C<normal>, C<v-string> or C<v>
+* I<dotted>, I<normal>, I<v-string> or I<v>
 for values like C<< v1.2.3 >>.
-* C<no-vstring> (or C<no-v> or C<no_v>)
-to discard the opening C<v> for values like C<< 1.2.3 >>.
-* C<decimal>
+* I<no-vstring> (or I<no-v> or I<no_v>)
+to discard the opening I<v> for values like C<< 1.2.3 >>.
+* I<decimal>
 for values like C<< 1.002003 >>.
 
-Defaults to C<decimal> for compatibility.
+Defaults to I<decimal> for compatibility.
 
 =head2 version_regexp
 
