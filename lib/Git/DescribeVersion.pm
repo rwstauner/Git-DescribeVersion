@@ -305,12 +305,13 @@ Specify the output format for the version number.
 
 I had trouble determining the most reasonable names
 for the formats so a few variations are possible.
+(Pick the one which makes the most sense to you.)
 
 =for :list
 * I<dotted>, I<normal>, I<v-string> or I<v>
 for values like C<< v1.2.3 >>.
-* I<no-vstring> (or I<no-v> or I<no_v>)
-to discard the opening I<v> for values like C<< 1.2.3 >>.
+* I<no-v-string> (or I<no-v> or I<no_v>)
+to discard the opening C<v> for values like C<< 1.2.3 >>.
 * I<decimal>
 for values like C<< 1.002003 >>.
 
