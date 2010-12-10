@@ -17,7 +17,7 @@ See L<Git::DescribeVersion::App> for more examples of that usage.
 use strict;
 use warnings;
 
-use version 0.77 ();
+use version 0.82 ();
 
 our %Defaults = (
 	first_version 	=> 'v0.1',
@@ -166,14 +166,15 @@ sub parse_version {
 
 	# quote 'version' to reference the module and not call the local sub
 	my $vobject = eval {
+		# don't even try to parse it if it doesn't look like a version
 		'version'->parse($vstring)
-			#if version::is_lax($vstring); # version 0.82
+			if version::is_lax($vstring);
 	};
 
 	# Don't die if it's not parseable, just return nothing.
 	if( my $error = $@ || !$vobject ){
 		$error = $self->prepare_warning($error);
-		warn("Version '$vstring' not a valid version string.\n$error");
+		warn("'$vstring' is not a valid version string.\n$error");
 		return;
 	}
 
