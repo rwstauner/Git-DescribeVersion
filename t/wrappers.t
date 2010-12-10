@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 use Test::More tests => 3 * ((2 * 2) + 2); # wrappers * ((methods * tests) + extra tests)
-use Test::MockObject;
-use Test::MockObject::Extends;
+use Test::MockObject 1.09;
+use Test::MockObject::Extends 1.09;
 use Git::DescribeVersion ();
 
 my %opts = (

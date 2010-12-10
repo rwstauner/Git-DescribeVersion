@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::MockObject;
-use Test::MockObject::Extends;
+use Test::MockObject 1.09;
+use Test::MockObject::Extends 1.09;
 
 my $version = '1.002003';
 my $expversion = $version;
