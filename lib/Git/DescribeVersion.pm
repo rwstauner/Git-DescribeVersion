@@ -363,6 +363,7 @@ command line statement (so that I could put I<that> in my Makefiles).
 =for :list
 * Allow for more complex regexps (multiple groups) if there is a need.
 * Options for raising errors versus swallowing them?
+* Consider a dynamic installation to test C<`git --version`>.
 
 =head1 SEE ALSO
 
