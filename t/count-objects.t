@@ -1,9 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
-
-use FindBin;
-use lib "$FindBin::Bin/lib";
+use lib 't/lib';
 use GitDVTest;
 
 plan tests => (@counts * 3 + 1) * @versions; # (counts * formats + isa) * versions

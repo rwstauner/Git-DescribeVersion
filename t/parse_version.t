@@ -1,9 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
-
-use FindBin;
-use lib "$FindBin::Bin/lib";
+use lib 't/lib';
 use GitDVTest;
 
 my @tests = (

@@ -5,8 +5,7 @@ eval "use Test::Output";
 plan skip_all => "Test::Output required for testing STDOUT"
 	if $@;
 
-use FindBin;
-use lib "$FindBin::Bin/lib";
+use lib 't/lib';
 use GitDVTest;
 
 plan tests => @commits * @versions * 3 * 2; # commits * versions * formats * (run + App->run)
