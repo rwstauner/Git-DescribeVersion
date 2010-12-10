@@ -77,7 +77,10 @@ sub test_version_from {
 	);
 }
 
-{
+SKIP: {
+	skip 'backtick tests designed for Linux', 6
+		if $^O !~ /linux|unix/i;
+
 	my ($opt, $mod) = qw(git_backticks backticks);
 
 	my $gdv = Git::DescribeVersion->new(%opts, $opt => 'echo');
