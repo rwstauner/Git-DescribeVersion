@@ -61,6 +61,21 @@ sub new {
 	bless $self, $class;
 }
 
+=method format_version
+
+Format the supplied version object
+according to the L</format> attribute.
+
+=cut
+
+sub format_version {
+	my ($self, $vobject) = @_;
+	my $format = $self->{format} =~ /dot|normal|v|string/ ? 'normal' : 'numify';
+	my $version = $vobject->$format;
+	$version =~ s/^v// if $self->{format} =~ /no.?v/;
+	return $version;
+}
+
 =method git
 
 A method to wrap the git commands.
@@ -178,10 +193,7 @@ sub parse_version {
 		return;
 	}
 
-	my $format = $self->{format} =~ /dot|normal|v|string/ ? 'normal' : 'numify';
-	my $version = $vobject->$format;
-	$version =~ s/^v// if $self->{format} =~ /no.?v/;
-	return $version;
+	return $self->format_version($vobject);
 }
 
 # normalize error message
