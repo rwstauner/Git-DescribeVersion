@@ -43,8 +43,8 @@ sub test_version_from {
 				# test returned arguments
 				is_deeply(\@args,     shift(@exp),  "$mod $method returned");
 
-				# proceed as normal (not that we care)
-				return @args;
+				# return fake arguments so processing can continue... we're done testing
+				return (1, 0);
 			}
 		);
 		$gdv->$method();
