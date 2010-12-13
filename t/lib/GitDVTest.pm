@@ -3,6 +3,7 @@ use strict;
 use Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(
+	&description
 	&expect_warning
 	&expectation
 	&test_expectations
@@ -18,6 +19,9 @@ use version 0.77;
 my $test_warn_mod = 'Test::Output';
 my $test_warn = eval "use $test_warn_mod; 1";
 $test_warn = 0 if $@;
+
+# use sprintf for ease/clarity; use %d to turn '' into 0
+sub description { sprintf '%s-%d-%s', $_[0], $_[1], 'gdeadbeef' }
 
 sub expect_warning ($$;$) {
 	my $sub = pop @_;
