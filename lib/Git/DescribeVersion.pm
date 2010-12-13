@@ -161,8 +161,7 @@ sub parse_version {
 	# trying to parse it, default to first_version.
 	$prefix = $self->{first_version}
 		unless defined $prefix;
-	$count  = 0
-		unless defined $count;
+	$count ||= 0;
 
 	# If still undef (first_version explicitly set to undef)
 	# don't die trying to parse it, just return nothing.

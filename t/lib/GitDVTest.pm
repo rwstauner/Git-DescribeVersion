@@ -40,7 +40,7 @@ sub expectation ($$$) {
 	my ($gv, $version, $count) = @_;
 	my ($tag, $dec, $dot, $regexp) = @$version;
 	$tag = '~' if !defined $tag;
-	$count = 0 if !defined $count;
+	$count ||= 0;
 
 	# hack
 	$gv->{version_regexp} = $regexp ||
