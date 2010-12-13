@@ -110,7 +110,7 @@ our @versions = map { [(split(/\s+/))[1, 2, 3, 4]] } split(/\n/, <<TAGS);
 	date-12.05-ver-10.21-foo  12.005    v12.5
 TAGS
 
-our @commits = qw(8 12 49 99 135 999 1234);
+our @commits = qw(0 8 12 49 99 135 999 1234);
 
 # make sub-arrays like (['0', 'count: 0', 'size: 0'])
 our @counts = map { [split(/\n/)] } split(/\n\n/, <<COUNTS);
