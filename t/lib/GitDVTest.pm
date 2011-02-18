@@ -12,9 +12,9 @@ our @EXPORT = qw(
 	@commits
 	@counts
 );
-use Test::More;
+use Test::More 0.96;
 use Test::MockObject::Extends 1.09;
-use version 0.77;
+use version 0.82;
 
 my $test_warn_mod = 'Test::Output';
 my $test_warn = eval "use $test_warn_mod; 1";

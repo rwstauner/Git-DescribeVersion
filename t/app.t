@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::More 0.96;
 eval "use Test::Output";
 plan skip_all => "Test::Output required for testing STDOUT"
 	if $@;

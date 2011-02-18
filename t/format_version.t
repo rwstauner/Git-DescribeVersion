@@ -1,7 +1,7 @@
 use strict;
 use warnings;
-use Test::More;
-use version;
+use Test::More 0.96;
+use version 0.82;
 
 my $vobject = version->parse('v1.2.3');
 
