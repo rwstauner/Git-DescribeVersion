@@ -25,14 +25,14 @@ my @tests = (
 	[qw(git_backticks)]
 );
 
-plan tests => @tests * 3 - 1; # 3 each but no require_ok() on last one
+plan tests => @tests * scalar keys %$opts;
 
 my $git_describe_warning = 'fatal: No names found, cannot describe anything.';
 
 foreach my $test ( @tests ){
 	my ($opt, $mod) = @$test;
 	if( $mod ){
-		require_ok($mod)
+		eval "require $mod" or die $@;
 	}
 	else {
 		$mod = $opt;

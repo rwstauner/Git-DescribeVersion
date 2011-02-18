@@ -30,11 +30,11 @@ my @tests = (
 	['4',     'ppp', undef,         undef,       {}],
 );
 
-# tests * (formats + isa) + (formats * warnings) + require_ok
-plan tests => @tests * (3 + 1) + (3 * grep { !defined $$_[2] } @tests) + 1;
+# tests * (formats + isa) + (formats * warnings)
+plan tests => @tests * (3 + 1) + (3 * grep { !defined $$_[2] } @tests);
 
 my $mod = 'Git::DescribeVersion';
-require_ok($mod);
+eval "require $mod" or die $@;
 
 foreach my $test ( @tests ){
 	my ($prefix, $count, $dec, $dot, $opts) = @$test;

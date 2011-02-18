@@ -32,12 +32,11 @@ my %tests = (
 	)]
 );
 
-plan tests => (map { @$_ } values %tests) + 2; # tests + (require + isa)
+plan tests => (map { @$_ } values %tests) + 1; # tests + new_ok
 
 my $mod = 'Git::DescribeVersion';
-require_ok($mod);
-my $gdv = $mod->new();
-isa_ok($gdv, $mod);
+eval "require $mod" or die $@;
+my $gdv = new_ok($mod);
 
 foreach my $version ( keys %tests ){
 	foreach my $format ( @{$tests{$version}} ){
