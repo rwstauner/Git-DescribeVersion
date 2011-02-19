@@ -1,0 +1,42 @@
+Revision history for Git::DescribeVersion
+
+{{$NEXT}}
+
+1.001011 2010-12-16
+
+  - Improve handling of trailing zeroes
+  - Improvements to documentation and tests
+
+1.001005 2010-12-10
+
+  - Require 0.82 of version.pm (instead of 0.77)
+  - Improvements to documentation and tests
+
+1.000010 2010-12-07
+
+  - Add option to specify desired version format
+  - Enable module to work with Git::Wrapper, Git::Repository, or `git`
+  - Improvements to documentation and tests
+
+0.007006 2010-11-17
+
+  - Moved Dist::Zilla::Plugin::Git::DescribeVersion to a separate dist
+
+0.006013 2010-11-16
+
+  - Additional Documentation
+
+0.006012 2010-11-15
+
+  - Include Dist::Zilla::Plugin::Git::DescribeVersion
+  - Change default 'version_regexp' to catch a wider variety of tag patterns
+  - Improvements to documentation and tests
+
+0.005011 2010-11-09
+
+  - Catch 'describe' errors and show a warning
+  - Improvements to documentation and tests
+
+0.004008 2010-10-24
+
+  - Initial Release to CPAN
