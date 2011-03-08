@@ -4,8 +4,9 @@ Revision history for Git::DescribeVersion
 
 1.001011 2010-12-16
 
-  - Improve handling of trailing zeroes
+  - Improve handling of trailing zeroes ("0th commit since tag")
   - Improvements to documentation and tests
+  - use Module::Build
 
 1.001005 2010-12-10
 
@@ -15,6 +16,7 @@ Revision history for Git::DescribeVersion
 1.000010 2010-12-07
 
   - Add option to specify desired version format
+    (dotted-decimal, decimal, or dotted w/o the leading 'v')
   - Enable module to work with Git::Wrapper, Git::Repository, or `git`
   - Improvements to documentation and tests
 
@@ -24,11 +26,11 @@ Revision history for Git::DescribeVersion
 
 0.006013 2010-11-16
 
-  - Additional Documentation
+  - Add example gitconfig usage
 
 0.006012 2010-11-15
 
-  - Include Dist::Zilla::Plugin::Git::DescribeVersion
+  - Allow Git::DescribeVersion::App::run() to be called as a class method
   - Change default 'version_regexp' to catch a wider variety of tag patterns
   - Improvements to documentation and tests
 
