@@ -2,6 +2,8 @@ Revision history for Git::DescribeVersion
 
 {{$NEXT}}
 
+  - Superficial dist/release changes
+
 1.001011 2010-12-16
 
   - Improve handling of trailing zeroes ("0th commit since tag")
