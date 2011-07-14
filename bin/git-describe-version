@@ -1,0 +1,31 @@
+#!/usr/local/bin/perl
+
+use strict;
+use warnings;
+
+# PODNAME: git-describe-version
+# ABSTRACT: Enable "git describe-version" command
+
+use Git::DescribeVersion::App ();
+
+Git::DescribeVersion::App->run();
+
+=head1 DESCRIPTION
+
+This script enables you to execute
+
+	git describe-version
+
+to print the current repository version
+as determined by L<Git::DescribeVersion>.
+
+It is a small wrapper around
+L<Git::DescribeVersion::App/run>.
+
+=head1 SEE ALSO
+
+=for :list
+* L<Git::DescribeVersion::App>
+* L<Git::DescribeVersion>
+
+=cut

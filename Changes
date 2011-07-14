@@ -2,6 +2,9 @@ Revision history for Git::DescribeVersion
 
 {{$NEXT}}
 
+  - Add git-describe-version executable
+  - Make Git::DescribeVersion::App::run look in @ARGV as well
+
   - Superficial dist/release changes
 
 1.001011  2010-12-17T04:25:14Z
