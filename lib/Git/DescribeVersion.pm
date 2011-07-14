@@ -4,19 +4,6 @@ use warnings;
 package Git::DescribeVersion;
 # ABSTRACT: Use git-describe to show a repo's version
 
-=head1 SYNOPSIS
-
-	use Git::DescribeVersion ();
-	Git::DescribeVersion->new({opt => 'value'})->version();
-
-Or this one-liner:
-
-	perl -MGit::DescribeVersion::App -e run
-
-See L<Git::DescribeVersion::App> for more examples of that usage.
-
-=cut
-
 use version 0.82 ();
 
 our %Defaults = (
@@ -289,6 +276,23 @@ sub version_from_count_objects {
 =for Pod::Coverage git_backticks git_repository git_wrapper prepare_warning
 
 =for stopwords repo's todo
+
+=head1 SYNOPSIS
+
+  use Git::DescribeVersion ();
+  print Git::DescribeVersion->new({opt => 'value'})->version();
+
+=head1 DESCRIPTION
+
+Use C<git describe> to determine a git repo's version.
+
+This is the main module,
+though it's probably more useful run from the shell:
+
+  $ git describe-version
+
+The included C<git-describe-version> script
+wraps L<Git::DescribeVersion::App>.
 
 =head1 OPTIONS
 

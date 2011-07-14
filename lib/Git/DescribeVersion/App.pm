@@ -70,6 +70,10 @@ sub usage {
 
 =for Pod::Coverage options usage
 
+=for test_synopsis
+1;
+__END__
+
 =head1 SYNOPSIS
 
 Print out the version from L<Git::DescribeVersion> in one line:
