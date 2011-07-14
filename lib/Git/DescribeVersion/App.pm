@@ -7,7 +7,8 @@ use Git::DescribeVersion ();
 
 # simple: enable `perl -MGit::DescribeVersion::App -e run`
 sub import {
-	*main::run = \&run;
+	no strict 'refs'; ## no critic
+	*{caller(0) . '::run'} = \&run;
 }
 
 sub run {
