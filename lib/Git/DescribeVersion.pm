@@ -1,3 +1,6 @@
+use strict;
+use warnings;
+
 package Git::DescribeVersion;
 # ABSTRACT: Use git-describe to show a repo's version
 
@@ -13,9 +16,6 @@ Or this one-liner:
 See L<Git::DescribeVersion::App> for more examples of that usage.
 
 =cut
-
-use strict;
-use warnings;
 
 use version 0.82 ();
 

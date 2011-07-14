@@ -1,8 +1,9 @@
+use strict;
+use warnings;
+
 package Git::DescribeVersion::App;
 # ABSTRACT: Run Git::DescribeVersion as one-line script
 
-use strict;
-use warnings;
 use Git::DescribeVersion ();
 use Getopt::Long qw(GetOptions); # core
 
