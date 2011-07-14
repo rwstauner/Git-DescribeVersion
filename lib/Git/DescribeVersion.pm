@@ -1,3 +1,4 @@
+# vim: set ts=2 sts=2 sw=2 expandtab smarttab:
 use strict;
 use warnings;
 
@@ -7,45 +8,45 @@ package Git::DescribeVersion;
 use version 0.82 ();
 
 our %Defaults = (
-	first_version 	=> 'v0.1',
-	match_pattern 	=> 'v[0-9]*',
-	format 			=> 'decimal',
-	version_regexp 	=> '([0-9._]+)'
+  first_version   => 'v0.1',
+  match_pattern   => 'v[0-9]*',
+  format      => 'decimal',
+  version_regexp  => '([0-9._]+)'
 );
 
 =method new
 
 The constructor accepts a hash or hashref of options:
 
-	Git::DescribeVersion->new({opt => 'value'});
-	Git::DescribeVersion->new(opt1 => 'v1', opt2 => 'v2');
+  Git::DescribeVersion->new({opt => 'value'});
+  Git::DescribeVersion->new(opt1 => 'v1', opt2 => 'v2');
 
 See L</OPTIONS> for an explanation of the available options.
 
 =cut
 
 sub new {
-	my $class = shift;
-	# accept a hash or hashref
-	my %opts = ref($_[0]) ? %{$_[0]} : @_;
-	my $self = {
-		%Defaults,
-		# restrict accepted arguments
-		map { $_ => $opts{$_} } grep { exists($opts{$_}) } keys %Defaults
-	};
+  my $class = shift;
+  # accept a hash or hashref
+  my %opts = ref($_[0]) ? %{$_[0]} : @_;
+  my $self = {
+    %Defaults,
+    # restrict accepted arguments
+    map { $_ => $opts{$_} } grep { exists($opts{$_}) } keys %Defaults
+  };
 
-	$self->{directory} = $opts{directory} || '.';
-	# accept a Git::Repository or Git::Wrapper object (or command to exec)
-	# or a simple '1' (true value) to indicate which one is desired
-	foreach my $mod ( qw(git_repository git_wrapper git_backticks) ){
-		if( $opts{$mod} ){
-			$self->{git} = $mod;
-			# if it's just a true value leave it blank so we create later
-			$self->{$mod} = $opts{$mod}
-				unless $opts{$mod} eq '1';
-		}
-	}
-	bless $self, $class;
+  $self->{directory} = $opts{directory} || '.';
+  # accept a Git::Repository or Git::Wrapper object (or command to exec)
+  # or a simple '1' (true value) to indicate which one is desired
+  foreach my $mod ( qw(git_repository git_wrapper git_backticks) ){
+    if( $opts{$mod} ){
+      $self->{git} = $mod;
+      # if it's just a true value leave it blank so we create later
+      $self->{$mod} = $opts{$mod}
+        unless $opts{$mod} eq '1';
+    }
+  }
+  bless $self, $class;
 }
 
 =method format_version
@@ -56,11 +57,11 @@ according to the L</format> attribute.
 =cut
 
 sub format_version {
-	my ($self, $vobject) = @_;
-	my $format = $self->{format} =~ /dot|normal|v|string/ ? 'normal' : 'numify';
-	my $version = $vobject->$format;
-	$version =~ s/^v// if $self->{format} =~ /no.?v/;
-	return $version;
+  my ($self, $vobject) = @_;
+  my $format = $self->{format} =~ /dot|normal|v|string/ ? 'normal' : 'numify';
+  my $version = $vobject->$format;
+  $version =~ s/^v// if $self->{format} =~ /no.?v/;
+  return $version;
 }
 
 =method git
@@ -74,61 +75,61 @@ Falls back to using backticks.
 # NOTE: the git* subs are called in list context
 
 sub git {
-	my ($self) = @_;
-	unless( $self->{git} ){
-		# Git::Repository is easier to install than Git::Wrapper
-		if( eval 'require Git::Repository; 1' ){
-			$self->{git} = 'git_repository';
-		}
-		elsif( eval 'require Git::Wrapper; 1' ){
-			$self->{git} = 'git_wrapper';
-		}
-		else {
-			$self->{git} = 'git_backticks';
-		}
-	}
-	goto &{$self->{git}};
+  my ($self) = @_;
+  unless( $self->{git} ){
+    # Git::Repository is easier to install than Git::Wrapper
+    if( eval 'require Git::Repository; 1' ){
+      $self->{git} = 'git_repository';
+    }
+    elsif( eval 'require Git::Wrapper; 1' ){
+      $self->{git} = 'git_wrapper';
+    }
+    else {
+      $self->{git} = 'git_backticks';
+    }
+  }
+  goto &{$self->{git}};
 }
 
 sub git_backticks {
-	my ($self, $command, @args) = @_;
-	warn("'directory' attribute not supported when using backticks.\n" .
-		"Consider installing Git::Repository or Git::Wrapper.\n")
-			if $self->{directory} && $self->{directory} ne '.';
+  my ($self, $command, @args) = @_;
+  warn("'directory' attribute not supported when using backticks.\n" .
+    "Consider installing Git::Repository or Git::Wrapper.\n")
+      if $self->{directory} && $self->{directory} ne '.';
 
-	my $exec = join(' ',
-		map { quotemeta }
-			# the external app to run
-			($self->{git_backticks} ||= 'git'),
-			$command,
-			map { ref $_ ? @$_ : $_ } @args
-	);
+  my $exec = join(' ',
+    map { quotemeta }
+      # the external app to run
+      ($self->{git_backticks} ||= 'git'),
+      $command,
+      map { ref $_ ? @$_ : $_ } @args
+  );
 
-	return (`$exec`);
+  return (`$exec`);
 }
 
 sub git_repository {
-	my ($self, $command, @args) = @_;
-	(
-		$self->{git_repository} ||=
-			Git::Repository->new(work_tree => $self->{directory})
-	)
-		->run($command,
-			map { ref $_ ? @$_ : $_ } @args
-		);
+  my ($self, $command, @args) = @_;
+  (
+    $self->{git_repository} ||=
+      Git::Repository->new(work_tree => $self->{directory})
+  )
+    ->run($command,
+      map { ref $_ ? @$_ : $_ } @args
+    );
 }
 
 sub git_wrapper {
-	my ($self, $command, @args) = @_;
-	$command =~ tr/-/_/;
-	(
-		$self->{git_wrapper} ||=
-			Git::Wrapper->new($self->{directory})
-	)
-		->$command({
-			map { ($$_[0] =~ /^-{0,2}(.+)$/, $$_[1]) }
-				map { ref $_ ? $_ : [$_ => 1] } @args
-		});
+  my ($self, $command, @args) = @_;
+  $command =~ tr/-/_/;
+  (
+    $self->{git_wrapper} ||=
+      Git::Wrapper->new($self->{directory})
+  )
+    ->$command({
+      map { ($$_[0] =~ /^-{0,2}(.+)$/, $$_[1]) }
+        map { ref $_ ? $_ : [$_ => 1] } @args
+    });
 }
 
 
@@ -141,55 +142,55 @@ Uses the L<version|version> module to parse.
 =cut
 
 sub parse_version {
-	my ($self, $prefix, $count) = @_;
+  my ($self, $prefix, $count) = @_;
 
-	# This is unlikely as it should mean that both git commands
-	# returned unexpected output.  If it does happen, don't die
-	# trying to parse it, default to first_version.
-	$prefix = $self->{first_version}
-		unless defined $prefix;
-	$count ||= 0;
+  # This is unlikely as it should mean that both git commands
+  # returned unexpected output.  If it does happen, don't die
+  # trying to parse it, default to first_version.
+  $prefix = $self->{first_version}
+    unless defined $prefix;
+  $count ||= 0;
 
-	# If still undef (first_version explicitly set to undef)
-	# don't die trying to parse it, just return nothing.
-	unless( defined $prefix ){
-		warn("Version could not be determined.\n");
-		return;
-	}
+  # If still undef (first_version explicitly set to undef)
+  # don't die trying to parse it, just return nothing.
+  unless( defined $prefix ){
+    warn("Version could not be determined.\n");
+    return;
+  }
 
-	# s//$1/ requires the regexp to be anchored.
-	# Doing a match and then assigning to $1 does not.
-	if( $self->{version_regexp} && $prefix =~ /$self->{version_regexp}/ ){
-		$prefix = $1;
-	}
+  # s//$1/ requires the regexp to be anchored.
+  # Doing a match and then assigning to $1 does not.
+  if( $self->{version_regexp} && $prefix =~ /$self->{version_regexp}/ ){
+    $prefix = $1;
+  }
 
-	my $vstring = "v$prefix.$count";
+  my $vstring = "v$prefix.$count";
 
-	# quote 'version' to reference the module and not call the local sub
-	my $vobject = eval {
-		# don't even try to parse it if it doesn't look like a version
-		'version'->parse($vstring)
-			if version::is_lax($vstring);
-	};
+  # quote 'version' to reference the module and not call the local sub
+  my $vobject = eval {
+    # don't even try to parse it if it doesn't look like a version
+    'version'->parse($vstring)
+      if version::is_lax($vstring);
+  };
 
-	# Don't die if it's not parseable, just return nothing.
-	if( my $error = $@ || !$vobject ){
-		$error = $self->prepare_warning($error);
-		warn("'$vstring' is not a valid version string.\n$error");
-		return;
-	}
+  # Don't die if it's not parseable, just return nothing.
+  if( my $error = $@ || !$vobject ){
+    $error = $self->prepare_warning($error);
+    warn("'$vstring' is not a valid version string.\n$error");
+    return;
+  }
 
-	return $self->format_version($vobject);
+  return $self->format_version($vobject);
 }
 
 # normalize error message
 
 sub prepare_warning {
-	my ($self, $error) = @_;
-	return '' unless $error;
-	$error =~ s/ at \S+?\.pm line \d+\.?\s*$//;
-	chomp($error);
-	return $error . "\n";
+  my ($self, $error) = @_;
+  return '' unless $error;
+  $error =~ s/ at \S+?\.pm line \d+\.?\s*$//;
+  chomp($error);
+  return $error . "\n";
 }
 
 =method version
@@ -206,9 +207,9 @@ and will start the count from the L</first_version> option.
 =cut
 
 sub version {
-	my ($self) = @_;
-	return $self->version_from_describe() ||
-		$self->version_from_count_objects();
+  my ($self) = @_;
+  return $self->version_from_describe() ||
+    $self->version_from_count_objects();
 }
 
 =method version_from_describe
@@ -218,7 +219,7 @@ tag matching L</match_pattern>.
 
 It effectively calls
 
-	git describe --match "${match_pattern}" --tags --long
+  git describe --match "${match_pattern}" --tags --long
 
 If no matching tags are found (or some other error occurs)
 it will return undef.
@@ -226,25 +227,25 @@ it will return undef.
 =cut
 
 sub version_from_describe {
-	my ($self) = @_;
-	my ($ver) = eval {
-		$self->git('describe',
-			['--match' => $self->{match_pattern}], qw(--tags --long)
-		);
-	};
-	# usually you'll expect a tag to be found, so warn if it isn't
-	if( my $error = $@ ){
-		$error = $self->prepare_warning($error);
-		warn("git-describe: $error");
-	}
+  my ($self) = @_;
+  my ($ver) = eval {
+    $self->git('describe',
+      ['--match' => $self->{match_pattern}], qw(--tags --long)
+    );
+  };
+  # usually you'll expect a tag to be found, so warn if it isn't
+  if( my $error = $@ ){
+    $error = $self->prepare_warning($error);
+    warn("git-describe: $error");
+  }
 
-	# return nothing so we know to move on to count-objects
-	return unless $ver;
+  # return nothing so we know to move on to count-objects
+  return unless $ver;
 
-	# ignore the -gSHA
-	my ($tag, $count) = ($ver =~ /^(.+?)-(\d+)-(g[0-9a-f]+)$/);
+  # ignore the -gSHA
+  my ($tag, $count) = ($ver =~ /^(.+?)-(\d+)-(g[0-9a-f]+)$/);
 
-	return $self->parse_version($tag, $count);
+  return $self->parse_version($tag, $count);
 }
 
 =method version_from_count_objects
@@ -254,21 +255,21 @@ in the repository.  It then appends this count to L</first_version>.
 
 It effectively calls
 
-	git count-objects -v
+  git count-objects -v
 
 and sums up the counts for 'count' and 'in-pack'.
 
 =cut
 
 sub version_from_count_objects {
-	my ($self) = @_;
-	my @counts = $self->git(qw(count-objects -v));
-	my $count = 0;
-	local $_;
-	foreach (@counts){
-		/(count|in-pack): (\d+)/ and $count += $2;
-	}
-	return $self->parse_version($self->{first_version}, $count);
+  my ($self) = @_;
+  my @counts = $self->git(qw(count-objects -v));
+  my $count = 0;
+  local $_;
+  foreach (@counts){
+    /(count|in-pack): (\d+)/ and $count += $2;
+  }
+  return $self->parse_version($self->{first_version}, $count);
 }
 
 1;
@@ -355,9 +356,9 @@ Defaults to C<< v[0-9]* >>.
 
 This module started out as a line in a Makefile:
 
-	VERSION = $(shell (cd $(srcdir); \
-		git describe --match 'v[0-9].[0-9]' --tags --long | \
-		grep -Eo 'v[0-9]+\.[0-9]+-[0-9]+' | tr - . | cut -c 2-))
+  VERSION = $(shell (cd $(srcdir); \
+    git describe --match 'v[0-9].[0-9]' --tags --long | \
+    grep -Eo 'v[0-9]+\.[0-9]+-[0-9]+' | tr - . | cut -c 2-))
 
 As soon as I wanted it in another Makefile
 (in another repository) I knew I had a problem.

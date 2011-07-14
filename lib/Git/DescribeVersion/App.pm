@@ -1,3 +1,4 @@
+# vim: set ts=2 sts=2 sw=2 expandtab smarttab:
 use strict;
 use warnings;
 
@@ -19,22 +20,22 @@ my %get_opt_spec = map {
 
 # simple: enable `perl -MGit::DescribeVersion::App -e run`
 sub import {
-	no strict 'refs'; ## no critic
-	*{caller(0) . '::run'} = \&run;
+  no strict 'refs'; ## no critic
+  *{caller(0) . '::run'} = \&run;
 }
 
 sub options {
-	# allow usage as Git::DescribeVersion::App->run()
-	# (for consistency with other App's)
-	# and simply discard the unused argument
-	shift(@_) if @_ && $_[0] eq __PACKAGE__;
+  # allow usage as Git::DescribeVersion::App->run()
+  # (for consistency with other App's)
+  # and simply discard the unused argument
+  shift(@_) if @_ && $_[0] eq __PACKAGE__;
 
-	my %env;
-	foreach my $opt ( keys %Defaults ){
-		# look for $ENV{GIT_DV_OPTION}
-		my $eopt = "\UGIT_DV_$opt";
-		$env{$opt} = $ENV{$eopt} if exists($ENV{$eopt});
-	}
+  my %env;
+  foreach my $opt ( keys %Defaults ){
+    # look for $ENV{GIT_DV_OPTION}
+    my $eopt = "\UGIT_DV_$opt";
+    $env{$opt} = $ENV{$eopt} if exists($ENV{$eopt});
+  }
 
   my %argv;
   GetOptions(\%argv, 'help' => \&usage, %get_opt_spec)
@@ -78,7 +79,7 @@ __END__
 
 Print out the version from L<Git::DescribeVersion> in one line:
 
-	perl -MGit::DescribeVersion::App -e run
+  perl -MGit::DescribeVersion::App -e run
 
 Options can be passed as program arguments (C<@ARGV>):
 
@@ -90,12 +91,12 @@ to be spelled with dashes instead of underscores.
 Options can also be passed in a hash or hashref
 just like L<Git::DescribeVersion/new>:
 
-	perl -MGit::DescribeVersion::App -e 'run(match_pattern => "rev-*")'
+  perl -MGit::DescribeVersion::App -e 'run(match_pattern => "rev-*")'
 
 Or can be environment variables spelled like I<GIT_DV_OPTION>:
 
-	export GIT_DV_MATCH_PATTERN="rev-*"
-	perl -MGit::DescribeVersion::App -e run
+  export GIT_DV_MATCH_PATTERN="rev-*"
+  perl -MGit::DescribeVersion::App -e run
 
 This (hopefully) makes it easy for you to write
 the alias, function, Makefile or script that does exactly what you want.
