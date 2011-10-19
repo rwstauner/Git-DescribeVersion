@@ -114,12 +114,16 @@ sub git_backticks {
     "Consider installing Git::Repository or Git::Wrapper.\n")
       if $self->{directory} && $self->{directory} ne '.';
 
+  @args = map { ref $_ ? @$_ : $_ } @args;
+
+  @args = map { quotemeta } @args
+    unless $^O eq 'MSWin32';
+
   my $exec = join(' ',
-    map { quotemeta }
       # the external app to run
       ($self->{git_backticks} ||= 'git'),
       $command,
-      map { ref $_ ? @$_ : $_ } @args
+      @args
   );
 
   return (`$exec`);
