@@ -2,9 +2,12 @@ Revision history for Git::DescribeVersion
 
 {{$NEXT}}
 
+1.010     2011-10-19T20:31:43Z
+
   - Fallback to another git wrapper if one fails.
     Closes rt-71622. Thanks to Matthew (mca1001) for the idea.
   - Localize $/ to work around Git::Repository bug rt-71621.
+  - Fixes for Windows
 
 1.003     2011-07-15T00:00:55Z
 
