@@ -24,7 +24,7 @@ system { $_->[0] } @$_ for (
 );
 
 append($path, 'bar');
-system { 'git' } qw(git commit -m bar), $path;
+system { 'git' } (qw(git commit -m bar), $path);
 
 my $exp_version = '1.001001';
 
