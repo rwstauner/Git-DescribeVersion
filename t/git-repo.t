@@ -35,7 +35,7 @@ sub test_all {
     skip 1 => 'Git::Repository not available'
       if ! eval { require Git::Repository };
 
-    my $gdv = Git::DescribeVersion->new(git_repository => Git::Repository->new(work_tree => "."));
+    my $gdv = Git::DescribeVersion->new(git_repository => 1);
     is $gdv->version, $exp_version, 'tag from Git::Repository';
   }
 
@@ -43,14 +43,14 @@ sub test_all {
     skip 1 => 'Git::Wraper not available'
       if ! eval { require Git::Wrapper };
 
-    my $gdv = Git::DescribeVersion->new(git_wrapper => Git::Wrapper->new("."));
+    my $gdv = Git::DescribeVersion->new(git_wrapper => 1);
     is $gdv->version, $exp_version, 'tag from Git::Wrapper';
   }
 
   {
     my ($opt, $mod) = qw(git_backticks backticks);
 
-    my $gdv = Git::DescribeVersion->new(git_backticks => 'git');
+    my $gdv = Git::DescribeVersion->new(git_backticks => 1);
     is $gdv->version, $exp_version, 'tag from backticks';
   }
 }
