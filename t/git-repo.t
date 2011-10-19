@@ -8,7 +8,7 @@ use File::Temp qw( tempdir );
 plan skip_all => '"git" command not available'
   if system("git --version") != 0;
 
-plan tests => 3;
+plan tests => 3 * 2;
 
 my $dir = tempdir( UNLINK => 1 );
 chdir $dir or die "failed to chdir: $!";
@@ -29,6 +29,11 @@ system { 'git' } qw(git commit -m bar), $path;
 my $exp_version = '1.000001';
 
 test_all();
+{
+  # test operations with alternate record separator (rt-71622)
+  local $/ = "\n\n";
+  test_all();
+}
 
 sub test_all {
   SKIP: {
