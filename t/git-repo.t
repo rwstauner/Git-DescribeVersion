@@ -14,12 +14,8 @@ my $dir = tempdir( UNLINK => 1 );
 chdir $dir or die "failed to chdir: $!";
 
 my $path = 'git-dv.txt';
-{
-  open(my $fh, '>', $path)
-    or die "failed to open $path: $!";
-  print $fh "gdv\n";
-  close $fh;
-}
+append($path, 'foo');
+
 system { $_->[0] } @$_ for (
   [qw(git init)],
   [qw(git add), $path],
@@ -27,7 +23,10 @@ system { $_->[0] } @$_ for (
   [qw(git tag v1.000)],
 );
 
-my $exp_version = '1.000000';
+append($path, 'bar');
+system { 'git' } qw(git commit -m bar), $path;
+
+my $exp_version = '1.000001';
 
 test_all();
 
@@ -54,4 +53,12 @@ sub test_all {
     my $gdv = Git::DescribeVersion->new(git_backticks => 'git');
     is $gdv->version, $exp_version, 'tag from backticks';
   }
+}
+
+sub append {
+  my $path = shift;
+  open(my $fh, '>>', $path)
+    or die "failed to open $path: $!";
+  print $fh "gdv\n";
+  close $fh;
 }
