@@ -8,7 +8,9 @@ our @EXPORT = qw(
   &expect_warning
   &expectation
   &test_expectations
+  &mock_gr
   &mock_gw
+  &return_args
   @versions
   @commits
   @counts
@@ -64,6 +66,8 @@ sub expectation ($$$) {
   } keys %values };
 }
 
+sub return_args { shift if ref $_[0]; return @_ }
+
 sub test_expectations ($$$&) {
   my ($gv, $version, $commits, $sub) = @_;
   my $exps = expectation($gv, $version, $commits);
@@ -73,10 +77,23 @@ sub test_expectations ($$$&) {
   }
 }
 
-sub mock_gw () {
+my $mocked = {};
+
+sub mock_gr {
+  return $mocked->{gr} ||=
+    mock_wrapper(qw(Git::Repository run command));
+}
+sub mock_gw {
+  return $mocked->{gw} ||=
+    mock_wrapper(qw(Git::Wrapper describe count_objects __version));
+}
+
+sub mock_wrapper () {
+  my ($pack, @methods) = @_;
   my $mock = Test::MockObject->new();
-  $mock->fake_module('Git::Wrapper' => __version => sub { '--version' });
-  $mock->mock(__version => sub { '--version' });
+  my %methods = map { ($_, \&return_args) } @methods;
+  $mock->fake_module($pack, %methods);
+  $mock->mock($_ => $methods{$_}) for keys %methods;
   $mock;
 }
 

@@ -4,13 +4,13 @@ use warnings;
 use Test::More tests => 3 * ((2 * 2) + 2); # wrappers * ((methods * tests) + extra tests)
 use Test::MockObject 1.09;
 use Test::MockObject::Extends 1.09;
+use lib 't/lib';
+use GitDVTest;
 use Git::DescribeVersion ();
 
 my %opts = (
   match_pattern => 'x*',
 );
-
-sub return_args { shift if ref $_[0]; return @_ }
 
 sub test_version_from {
   my ($gdv, $opt, $mod, @exp) = @_;
@@ -52,13 +52,13 @@ sub test_version_from {
   }
 }
 
+# set up mock objects before calling gdv->new
+mock_gw;
+mock_gr;
+
 {
   my ($opt, $mod) = qw(git_repository Git::Repository);
-  my $mock = Test::MockObject->new();
-  $mock->fake_module($mod);
-  $mock->mock($_, \&return_args) for qw(run command);
-
-  my $gdv = Git::DescribeVersion->new(%opts, $opt => $mock);
+  my $gdv = Git::DescribeVersion->new(%opts, $opt => mock_gr);
   test_version_from($gdv, $opt, $mod,
     [qw(describe --match), $opts{match_pattern}, qw(--tags --long)],
     [qw(count-objects -v)]
@@ -67,11 +67,7 @@ sub test_version_from {
 
 {
   my ($opt, $mod) = qw(git_wrapper Git::Wrapper);
-  my $mock = Test::MockObject->new();
-  $mock->fake_module($mod);
-  $mock->mock($_, \&return_args) for qw(describe count_objects);
-
-  my $gdv = Git::DescribeVersion->new(%opts, $opt => $mock);
+  my $gdv = Git::DescribeVersion->new(%opts, $opt => mock_gw);
   test_version_from($gdv, $opt, $mod,
     [{match => $opts{match_pattern}, tags => 1, long => 1}],
     [{v => 1}]
