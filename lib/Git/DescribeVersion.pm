@@ -127,6 +127,8 @@ sub git_backticks {
 
 sub git_repository {
   my ($self, $command, @args) = @_;
+  # Git::Repository 1.22 fails with alternate $/ (rt-71621)
+  local $/ = "\n";
   (
     $self->{git_repository} ||=
     do {
