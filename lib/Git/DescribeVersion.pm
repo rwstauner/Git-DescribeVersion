@@ -5,6 +5,7 @@ use warnings;
 package Git::DescribeVersion;
 # ABSTRACT: Use git-describe to show a repo's version
 
+use Carp (); # core
 use version 0.82 ();
 
 our %Defaults = (
@@ -12,6 +13,13 @@ our %Defaults = (
   match_pattern   => 'v[0-9]*',
   format      => 'decimal',
   version_regexp  => '([0-9._]+)'
+);
+
+# Git::Repository is easier to install than Git::Wrapper
+my @delegators = qw(
+  git_repository
+  git_wrapper
+  git_backticks
 );
 
 =method new
@@ -36,17 +44,26 @@ sub new {
   };
 
   $self->{directory} = $opts{directory} || '.';
+  bless $self, $class;
+
   # accept a Git::Repository or Git::Wrapper object (or command to exec)
   # or a simple '1' (true value) to indicate which one is desired
-  foreach my $mod ( qw(git_repository git_wrapper git_backticks) ){
+  foreach my $mod ( @delegators ){
     if( $opts{$mod} ){
       $self->{git} = $mod;
       # if it's just a true value leave it blank so we create later
+      # TODO: should this be checking ref?
       $self->{$mod} = $opts{$mod}
         unless $opts{$mod} eq '1';
+      # test that requested method "works"
+      eval { $self->$mod('--version') };
+      if( $@ ){
+        Carp::carp qq[Failed to execute $mod (will attempt other methods): $@];
+        delete @$self{(git => $mod)};
+      }
     }
   }
-  bless $self, $class;
+  return $self;
 }
 
 =method format_version
@@ -77,16 +94,16 @@ Falls back to using backticks.
 sub git {
   my ($self) = @_;
   unless( $self->{git} ){
-    # Git::Repository is easier to install than Git::Wrapper
-    if( eval 'require Git::Repository; 1' ){
-      $self->{git} = 'git_repository';
+    for my $method ( @delegators ){
+      $self->{git} ||= eval {
+        # confirm method works (without dying)
+        $self->$method('--version');
+        $method;
+      };
     }
-    elsif( eval 'require Git::Wrapper; 1' ){
-      $self->{git} = 'git_wrapper';
-    }
-    else {
-      $self->{git} = 'git_backticks';
-    }
+    Carp::croak("All git methods failed.  Is `git` installed?\n".
+      "Consider installing Git::Repository or Git::Wrapper.\n")
+      unless $self->{git};
   }
   goto &{$self->{git}};
 }
@@ -112,7 +129,10 @@ sub git_repository {
   my ($self, $command, @args) = @_;
   (
     $self->{git_repository} ||=
+    do {
+      require Git::Repository;
       Git::Repository->new(work_tree => $self->{directory})
+    }
   )
     ->run($command,
       map { ref $_ ? @$_ : $_ } @args
@@ -124,7 +144,10 @@ sub git_wrapper {
   $command =~ tr/-/_/;
   (
     $self->{git_wrapper} ||=
+    do {
+      require Git::Wrapper;
       Git::Wrapper->new($self->{directory})
+    }
   )
     ->$command({
       map { ($$_[0] =~ /^-{0,2}(.+)$/, $$_[1]) }

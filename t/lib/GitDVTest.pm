@@ -75,7 +75,8 @@ sub test_expectations ($$$&) {
 
 sub mock_gw () {
   my $mock = Test::MockObject->new();
-  $mock->fake_module('Git::Wrapper');
+  $mock->fake_module('Git::Wrapper' => __version => sub { '--version' });
+  $mock->mock(__version => sub { '--version' });
   $mock;
 }
 
