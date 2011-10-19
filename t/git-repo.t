@@ -45,7 +45,7 @@ sub test_all {
   }
 
   SKIP: {
-    skip 'Git::Wraper not available' => 1
+    skip 'Git::Wrapper not available' => 1
       if ! eval { require Git::Wrapper };
 
     my $gdv = Git::DescribeVersion->new(git_wrapper => 1);
