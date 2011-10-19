@@ -20,13 +20,13 @@ system { $_->[0] } @$_ for (
   [qw(git init)],
   [qw(git add), $path],
   [qw(git commit -m foo)],
-  [qw(git tag v1.000)],
+  [qw(git tag -a -m v1 v1.001)],
 );
 
 append($path, 'bar');
 system { 'git' } qw(git commit -m bar), $path;
 
-my $exp_version = '1.000001';
+my $exp_version = '1.001001';
 
 test_all();
 {
