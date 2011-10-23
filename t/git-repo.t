@@ -4,6 +4,7 @@ use warnings;
 use Test::More;
 use Git::DescribeVersion ();
 use File::Temp qw( tempdir );
+use Cwd qw( cwd ); # core
 
 # for debugging test reports: only print output upon failure
 my $failed = 0;
@@ -14,8 +15,10 @@ plan skip_all => '"git" command not available'
 
 plan tests => 3 * 2;
 
-my $dir = tempdir( UNLINK => 1 );
-chdir $dir or die "failed to chdir: $!";
+# need to cd back to let dir get removed
+my $oldpwd = cwd;
+my $dir = tempdir( CLEANUP => 1 );
+chdir "$dir" or die "failed to chdir: $!";
 
 my $path = 'git-dv.txt';
 append($path, 'foo');
@@ -40,6 +43,8 @@ test_all();
 }
 
 diag join("\n", @exe_output) if $failed;
+
+chdir $oldpwd or die "chdir back failed: $!";
 
 sub test_all {
   SKIP: {
