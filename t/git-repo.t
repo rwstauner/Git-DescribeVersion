@@ -5,8 +5,12 @@ use Test::More;
 use Git::DescribeVersion ();
 use File::Temp qw( tempdir );
 
+# for debugging test reports: only print output upon failure
+my $failed = 0;
+my @exe_output;
+
 plan skip_all => '"git" command not available'
-  if system("git --version") != 0;
+  if exe(qw(git --version)) != 0;
 
 plan tests => 3 * 2;
 
@@ -15,9 +19,6 @@ chdir $dir or die "failed to chdir: $!";
 
 my $path = 'git-dv.txt';
 append($path, 'foo');
-
-# for debugging test reports:
-sub exe { local $, = ' '; chomp(my $out = qx/@_/); diag "@_: $out ($?)"; }
 
 exe(@$_) for (
   [qw(git init)],
@@ -38,13 +39,16 @@ test_all();
   test_all();
 }
 
+diag join("\n", @exe_output) if $failed;
+
 sub test_all {
   SKIP: {
     skip 'Git::Repository not available' => 1
       if ! eval { require Git::Repository };
 
     my $gdv = Git::DescribeVersion->new(git_repository => 1);
-    is $gdv->version, $exp_version, 'tag from Git::Repository';
+    is $gdv->version, $exp_version, 'tag from Git::Repository'
+      or $failed++;
   }
 
   SKIP: {
@@ -52,14 +56,16 @@ sub test_all {
       if ! eval { require Git::Wrapper };
 
     my $gdv = Git::DescribeVersion->new(git_wrapper => 1);
-    is $gdv->version, $exp_version, 'tag from Git::Wrapper';
+    is $gdv->version, $exp_version, 'tag from Git::Wrapper'
+      or $failed++;
   }
 
   {
     my ($opt, $mod) = qw(git_backticks backticks);
 
     my $gdv = Git::DescribeVersion->new(git_backticks => 1);
-    is $gdv->version, $exp_version, 'tag from backticks';
+    is $gdv->version, $exp_version, 'tag from backticks'
+      or $failed++;
   }
 }
 
@@ -69,4 +75,14 @@ sub append {
     or die "failed to open $path: $!";
   print $fh "gdv\n";
   close $fh;
+}
+
+sub exe {
+  local $, = ' ';
+  my $out = qx/@_/; # 2>&1 ?
+  my $status = $?;
+  chomp $out;
+  # for debugging test reports:
+  push @exe_output, "@_: $out ($status)";
+  return $status;
 }

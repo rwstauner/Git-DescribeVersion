@@ -2,7 +2,7 @@ Revision history for Git::DescribeVersion
 
 {{$NEXT}}
 
-  - Display git command output in tests for debugging reports
+  - Display git command output upon test failure (for debugging reports)
 
 1.010     2011-10-19T20:31:43Z
 
