@@ -21,7 +21,7 @@ my $path = 'git-dv.txt';
 append($path, 'foo');
 
 exe(@$_) for (
-  [qw(git init)],
+  [qw(git init .)],
   [qw(git add), $path],
   [qw(git commit -q -m foo)],
   [qw(git tag -a -m v1 v1.001)],
