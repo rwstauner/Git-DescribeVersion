@@ -2,6 +2,9 @@ Revision history for Git::DescribeVersion
 
 {{$NEXT}}
 
+  [Test Fixes]
+  - Configure fake git user name/email for fake/test repo
+
 1.011     2011-10-23T01:29:09Z
 
   [Tests]
