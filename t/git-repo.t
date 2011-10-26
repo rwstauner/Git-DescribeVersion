@@ -24,7 +24,7 @@ my $path = 'git-dv.txt';
 append($path, 'foo');
 
 exe(@$_) for (
-  [qw(git init .)],
+  [qw(git), (qx/git --version/ =~ /(\d+\.\d+)/)[0] < 1.5 ? 'init-db' : 'init'],
   [qw(git config user.name GitDV)],
   [qw(git config user.email gitdv@example.org)],
   [qw(git add), $path],
