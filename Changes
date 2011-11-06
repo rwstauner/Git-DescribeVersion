@@ -2,6 +2,10 @@ Revision history for Git::DescribeVersion
 
 {{$NEXT}}
 
+  [Test Fixes]
+  - Attempt to make t/git-repo.t compatible with older git versions
+    in another way.
+
 1.013     2011-10-26T14:45:17Z
 
   [Test Fixes]

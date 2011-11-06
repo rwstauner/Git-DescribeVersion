@@ -28,7 +28,7 @@ exe(@$_) for (
   [qw(git config user.name GitDV)],
   [qw(git config user.email gitdv@example.org)],
   [qw(git add), $path],
-  [qw(git commit -q -m foo)],
+  [qw(git commit -m foo)],
   [qw(git tag -a -m v1 v1.001)],
 );
 
