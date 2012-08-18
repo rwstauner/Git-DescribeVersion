@@ -416,6 +416,7 @@ command line statement (so that I could put I<that> in my Makefiles).
 =head1 TODO
 
 =for :list
+* Allow using git-log to count commits affecting a subdirectory
 * Allow for more complex regexps (multiple groups) if there is a need.
 * Options for raising errors versus swallowing them?
 * Consider a dynamic installation to test C<`git --version`>.
