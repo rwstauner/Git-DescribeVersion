@@ -2,6 +2,12 @@ Revision history for Git::DescribeVersion
 
 {{$NEXT}}
 
+  [Documentation]
+  - Attempt to clarify intended usage in pod
+    (module adds 3rd part to a 2-part tag (v1.2 => v1.2.35))
+    to resolve rt-71626.
+    Thanks to Matthew Astley for helping straighten this out.
+
 1.014     2011-11-06T00:34:15Z
 
   [Test Fixes]

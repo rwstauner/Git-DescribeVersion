@@ -324,6 +324,14 @@ though it's probably more useful run from the shell:
 The included C<git-describe-version> script
 wraps L<Git::DescribeVersion::App>.
 
+The version is determined by counting the commits since the most recent tag
+(matching the L</match_pattern>)
+and using that count as the final part of the version.
+So to create a typical three part version (C<v1.2.3>)
+repo tags should be made of the first two parts (C<v1.2>)
+and the number of commits counted by C<git-describe>
+will become the third part (C<v1.2.35>).
+
 =head1 OPTIONS
 
 These options can be passed to L</new>:
