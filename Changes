@@ -2,6 +2,8 @@ Revision history for Git::DescribeVersion
 
 {{$NEXT}}
 
+1.015     2012-08-22T03:11:08Z
+
   [Documentation]
   - Attempt to clarify intended usage in pod
     (module adds 3rd part to a 2-part tag (v1.2 => v1.2.35))
