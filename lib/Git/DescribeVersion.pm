@@ -329,6 +329,7 @@ B<NOTE>: This module requires git version C<1.5.5> or greater.
 The version is determined by counting the commits since the most recent tag
 (matching the L</match_pattern>)
 and using that count as the final part of the version.
+
 So to create a typical three part version (C<v1.2.3>)
 repo tags should be made of the first two parts (C<v1.2>)
 and the number of commits counted by C<git-describe>
