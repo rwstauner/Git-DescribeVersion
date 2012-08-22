@@ -324,6 +324,8 @@ though it's probably more useful run from the shell:
 The included C<git-describe-version> script
 wraps L<Git::DescribeVersion::App>.
 
+B<NOTE>: This module requires git version C<1.5.5> or greater.
+
 The version is determined by counting the commits since the most recent tag
 (matching the L</match_pattern>)
 and using that count as the final part of the version.
